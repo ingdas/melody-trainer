@@ -1,20 +1,21 @@
 // components/playContinuously.js
 
 import playMelodies from './playMelodies';
-import MelodyGenerator from '../../model/MelodyGenerator';
-import {Instrument, Instruments} from "../../model/Instrument";
+import {generateMelody, Scale} from '../../model/MelodyGenerator';
+import {Instrument, Instruments, InstrumentType} from "../../model/Instrument";
+import type Melody from "../../model/Melody";
 
 const playContinuously = async (
     instruments: Instruments,
-    setInstrumentMelody,
-    abortControllerRef,
-    bpm,
-    timeSignature,
-    numMeasures,
-    context,
-    scale,
-    bassScale,
-    percussionScale,
+    setInstrumentMelody: (instrument: InstrumentType, newMelody: Melody) => void,
+    abortControllerRef: any,
+    bpm: number,
+    timeSignature: [number, number],
+    numMeasures: number,
+    context: AudioContext,
+    scale: Scale,
+    bassScale: Scale,
+    percussionScale: Scale,
 ) => {
 
     const timeFactor = 5 / bpm;
@@ -34,24 +35,24 @@ const playContinuously = async (
     while (!abortControllerRef.current.signal.aborted) {
         console.log(`looping iteration ${iteration}`, abortControllerRef.current);
         if (iteration % 4 === 0) {
-            newTrebleMelody = new MelodyGenerator(
+            newTrebleMelody = generateMelody({
                 scale,
                 numMeasures,
                 timeSignature,
-                instruments.treble.settings
-            ).generateMelody();
-            newBassMelody = new MelodyGenerator(
-                bassScale,
+                instrumentSettings: instruments.treble.settings
+            })
+            newBassMelody = generateMelody({
+                scale: bassScale,
                 numMeasures,
                 timeSignature,
-                instruments.bass.settings
-            ).generateMelody();
-            newPercussionMelody = new MelodyGenerator(
-                percussionScale,
+                instrumentSettings: instruments.bass.settings
+            })
+            newPercussionMelody = generateMelody({
+                scale: percussionScale,
                 numMeasures,
                 timeSignature,
-                instruments.percussion.settings
-            ).generateMelody();
+                instrumentSettings: instruments.percussion.settings
+            });
         }
 
         if (iteration % 2 === 0) {

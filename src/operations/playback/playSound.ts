@@ -1,4 +1,6 @@
 import generateAllNotesArray from '../allNotesArray';
+import {Soundfont} from "smplr";
+import {DrumMachine} from "smplr";
 
 const allNotesArray = generateAllNotesArray();
 
@@ -24,7 +26,7 @@ const noteMapping = {
 // PLAY SOUNDS
 const playSound = async (
     note,
-    instrument,
+    instrument: Soundfont | DrumMachine,
     context,
     time = context.currentTime,
     duration = 0.25,

@@ -6,7 +6,7 @@ import {SceneMap, TabBar} from 'react-native-tab-view';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 import Melody from './src/model/Melody';
-import MelodyGenerator from './src/model/MelodyGenerator';
+import {generateMelody} from './src/model/MelodyGenerator';
 
 import {useFonts} from 'expo-font';
 import generateAllNotesArray from './src/operations/allNotesArray';
@@ -18,8 +18,8 @@ import {
     modes,
     randomTonic,
     tonicOptions,
-} from './src/operations/scale/scaleHandler'; // Import relevant functions
-import SheetMusic from './src/components/SheetMusic'; // Import the SheetMusic component
+} from './src/operations/scale/scaleHandler';
+import SheetMusic from './src/components/SheetMusic';
 import MeasureAndTempoSettings from './src/components/settings/MeasureAndTempoSettings';
 import {ContinuousPlaybackSettings} from './src/components/settings/ContinuousPlaybackSettings';
 import TrebleSettings from './src/components/settings/TrebleSettings';
@@ -101,9 +101,9 @@ const App = () => {
     }, []);
 
     // melody
-    const generateMelody = (settings: InstrumentSettings) => {
+    const setNewMelody = (instrumentSettings: InstrumentSettings) => {
         let myScale: Scale = scale;
-        switch (settings.type) {
+        switch (instrumentSettings.type) {
             case Instrument.Metronome:
             case Instrument.Treble:
                 break;
@@ -114,20 +114,14 @@ const App = () => {
                 myScale = percussionScale;
                 break;
         }
-        const newMelody = new MelodyGenerator(
-            myScale,
+        const newMelody = generateMelody({
+            scale: myScale,
             numMeasures,
             timeSignature,
-            settings
-        ).generateMelody();
-        setInstrumentMelody(settings.type, newMelody);
+            instrumentSettings
+        });
+        setInstrumentMelody(instrumentSettings.type, newMelody);
     }
-
-
-    // MEASURE AND TEMPO HANDLING
-    const updateBpm = (newBpm) => {
-        setBpm(newBpm);
-    };
 
     // SCALE AND MODE HANDLING
     const handleRandomizeTonic = () => {
@@ -295,7 +289,7 @@ const App = () => {
         measure: () => (
             <MeasureAndTempoSettings
                 bpm={bpm}
-                updateBpm={updateBpm}
+                updateBpm={setBpm}
                 timeSignature={timeSignature}
                 setTimeSignature={setTimeSignature}
                 numMeasures={numMeasures}
@@ -418,17 +412,17 @@ const App = () => {
                 <View style={styles.pickerRow}>
                     <TouchableOpacity
                         style={styles.pickerButton}
-                        onPress={() => generateMelody(instruments.treble.settings)}>
+                        onPress={() => setNewMelody(instruments.treble.settings)}>
                         <Text style={styles.pickerButtonText}> Randomize Melody </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.pickerButton}
-                        onPress={() => generateMelody(instruments.bass.settings)}>
+                        onPress={() => setNewMelody(instruments.bass.settings)}>
                         <Text style={styles.pickerButtonText}> Randomize Bass Line </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.pickerButton}
-                        onPress={() => generateMelody(instruments.percussion.settings)}>
+                        onPress={() => setNewMelody(instruments.percussion.settings)}>
                         <Text style={styles.pickerButtonText}> Randomize Percussion </Text>
                     </TouchableOpacity>
                 </View>
@@ -513,7 +507,7 @@ const App = () => {
                 <View style={styles.settingsTab}>
                     <MeasureAndTempoSettings
                         bpm={bpm}
-                        updateBpm={updateBpm}
+                        updateBpm={setBpm}
                         timeSignature={timeSignature}
                         setTimeSignature={setTimeSignature}
                         numMeasures={numMeasures}
