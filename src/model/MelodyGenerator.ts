@@ -1,6 +1,6 @@
 import {Scale} from './Scale';
-import Melody from "./Melody";
 import convertRankedArrayToMelody from "../operations/melodyGeneration/convertRankedArrayToMelody";
+import {fromFlattenedNotes, Melody} from "./Melody";
 
 interface InstrumentSettings {
     notesPerMeasure: number;
@@ -214,7 +214,7 @@ function generateMelody(config: MelodyGeneratorConfig): Melody {
 
     const displayMelodyNotes = createDisplayMelody(melodyWithRests, scale, displayScale);
 
-    return Melody.fromFlattenedNotes(
+    return fromFlattenedNotes(
         melodyWithRests,
         timeSignature,
         numMeasures,

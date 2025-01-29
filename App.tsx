@@ -5,7 +5,6 @@ import {Dimensions, Text, TouchableOpacity, View,} from 'react-native';
 import {SceneMap, TabBar} from 'react-native-tab-view';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
-import Melody from './src/model/Melody';
 import {generateMelody} from './src/model/MelodyGenerator';
 
 import {useFonts} from 'expo-font';
@@ -38,6 +37,7 @@ import {Instrument} from "./src/model/Instrument";
 import {PercussionSettings} from "./src/components/settings/PercussionSettings";
 import {TempoMetronome} from "./src/components/TempoMetronome";
 import {createScale, defaultPercussionScale, generateBassScale, Scale} from "./src/model/Scale";
+import {updateMetronome} from "./src/model/Melody";
 
 
 const App = () => {
@@ -89,7 +89,7 @@ const App = () => {
     const abortControllerRef = useRef(null);
 
     useEffect(() => {
-        const updatedMetronome = Melody.updateMetronome(timeSignature, numMeasures);
+        const updatedMetronome = updateMetronome(timeSignature, numMeasures);
         setInstrumentMelody(Instrument.Metronome, updatedMetronome);
     }, [timeSignature, numMeasures]);
 

@@ -7,7 +7,12 @@ import {
     defaultTrebleInstrumentSettings,
     updateSound
 } from "./InstrumentSettings";
-import Melody from "./Melody";
+import {
+    defaultBassMelody,
+    defaultMetronomeMelody,
+    defaultPercussionMelody,
+    defaultTrebleMelody
+} from "./Melody";
 import {Dimensions} from "react-native";
 import {CacheStorage, Reverb} from "smplr";
 import {StoreActions, StoreState} from './UseStoreTypes';
@@ -39,19 +44,19 @@ export const useStore = create<StoreState & StoreActions>((set) => ({
     instruments: {
         [Instrument.Treble]: {
             settings: defaultTrebleInstrumentSettings(context, storage, reverb),
-            melody: Melody.defaultTrebleMelody(),
+            melody: defaultTrebleMelody(),
         },
         [Instrument.Bass]: {
             settings: defaultBassInstrumentSettings(context, storage, reverb),
-            melody: Melody.defaultBassMelody(),
+            melody: defaultBassMelody(),
         },
         [Instrument.Percussion]: {
             settings: defaultPercussionInstrumentSettings(context, storage, reverb),
-            melody: Melody.defaultPercussionMelody(),
+            melody: defaultPercussionMelody(),
         },
         [Instrument.Metronome]: {
             settings: defaultMetronomeInstrumentSettings(context, storage, reverb),
-            melody: Melody.defaultMetronomeMelody(),
+            melody: defaultMetronomeMelody(),
         },
     },
 
