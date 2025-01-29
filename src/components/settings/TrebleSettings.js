@@ -56,57 +56,61 @@ const TrebleSettings = ({
                         }) => {
     const [isPickerModalVisible, setPickerModalVisible] = useState(false);
     const [pickerType, setPickerType] = useState(null);
-
     const handleInstrumentChange = (newInstrument) => {
-        setTrebleInstrumentSettings((prevSettings) => ({
-            ...prevSettings,
+        setTrebleInstrumentSettings({
+            ...trebleInstrumentSettings,
             instrument: instrumentOptions[newInstrument],
-        }));
+        });
     };
 
     const handleRandomizationRuleChange = (newRule) => {
-        setTrebleInstrumentSettings((prevSettings) => ({
-            ...prevSettings,
+        setTrebleInstrumentSettings({
+            ...trebleInstrumentSettings,
             randomizationRules: randomizationRulesOptions[newRule],
-        }));
+        });
     };
 
     const handleNoteDenomChange = (newDenom) => {
-        setTrebleInstrumentSettings((prevSettings) => ({
-            ...prevSettings,
+        setTrebleInstrumentSettings({
+            ...trebleInstrumentSettings,
             smallestNoteDenom: noteDenomNames[newDenom],
-        }));
+        });
     };
 
-    const increaseNotesPerMeasure = () =>
-        setTrebleInstrumentSettings((prevSettings) => ({
-            ...prevSettings,
-            notesPerMeasure: Math.min(32, prevSettings.notesPerMeasure + 1),
-        }));
+    const increaseNotesPerMeasure = () => {
+        setTrebleInstrumentSettings({
+            ...trebleInstrumentSettings,
+            notesPerMeasure: Math.min(32, trebleInstrumentSettings.notesPerMeasure + 1),
+        });
+    };
 
-    const decreaseNotesPerMeasure = () =>
-        setTrebleInstrumentSettings((prevSettings) => ({
-            ...prevSettings,
-            notesPerMeasure: Math.max(0, prevSettings.notesPerMeasure - 1),
-        }));
+    const decreaseNotesPerMeasure = () => {
+        setTrebleInstrumentSettings({
+            ...trebleInstrumentSettings,
+            notesPerMeasure: Math.max(0, trebleInstrumentSettings.notesPerMeasure - 1),
+        });
+    };
 
-    const increaseRhythmVariability = () =>
-        setTrebleInstrumentSettings((prevSettings) => ({
-            ...prevSettings,
-            rhythmVariability: Math.min(100, prevSettings.rhythmVariability + 5),
-        }));
+    const increaseRhythmVariability = () => {
+        setTrebleInstrumentSettings({
+            ...trebleInstrumentSettings,
+            rhythmVariability: Math.min(100, trebleInstrumentSettings.rhythmVariability + 5),
+        });
+    };
 
-    const decreaseRhythmVariability = () =>
-        setTrebleInstrumentSettings((prevSettings) => ({
-            ...prevSettings,
-            rhythmVariability: Math.max(0, prevSettings.rhythmVariability - 5),
-        }));
+    const decreaseRhythmVariability = () => {
+        setTrebleInstrumentSettings({
+            ...trebleInstrumentSettings,
+            rhythmVariability: Math.max(0, trebleInstrumentSettings.rhythmVariability - 5),
+        });
+    };
 
-    const toggleTriplets = () =>
-        setTrebleInstrumentSettings((prevSettings) => ({
-            ...prevSettings,
-            enableTriplets: !prevSettings.enableTriplets,
-        }));
+    const toggleTriplets = () => {
+        setTrebleInstrumentSettings({
+            ...trebleInstrumentSettings,
+            enableTriplets: !trebleInstrumentSettings.enableTriplets,
+        });
+    };
 
     const decreaseNoteDenom = () => {
         const currentDenom = trebleInstrumentSettings.smallestNoteDenom;
@@ -116,10 +120,10 @@ const TrebleSettings = ({
         );
         const nextIndex = Math.min(denomKeys.length - 1, currentIndex + 1);
         const nextKey = denomKeys[nextIndex];
-        setTrebleInstrumentSettings((prevSettings) => ({
-            ...prevSettings,
+        setTrebleInstrumentSettings({
+            ...trebleInstrumentSettings,
             smallestNoteDenom: noteDenomOptions[nextKey],
-        }));
+        });
     };
 
     const increaseNoteDenom = () => {
@@ -130,10 +134,10 @@ const TrebleSettings = ({
         );
         const prevIndex = Math.max(0, currentIndex - 1);
         const prevKey = denomKeys[prevIndex];
-        setTrebleInstrumentSettings((prevSettings) => ({
-            ...prevSettings,
+        setTrebleInstrumentSettings({
+            ...trebleInstrumentSettings,
             smallestNoteDenom: noteDenomOptions[prevKey],
-        }));
+        });
     };
 
     const MaestroText = ({noteLetter}) => {
