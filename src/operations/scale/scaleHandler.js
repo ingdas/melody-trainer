@@ -311,6 +311,8 @@ const generateScale = (anyTonic, intervals, scaleRange) => {
     return scale;
 };
 
+const scaleTypes = Object.keys(modes);
+
 const randomScale = (
     scaleTypes,
     modes,
@@ -354,4 +356,6 @@ export {
     modes,
     intervalNames,
     intervalNamesMap,
+    scaleTypes,
+    getIntervalName
 };
