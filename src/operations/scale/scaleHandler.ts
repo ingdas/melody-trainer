@@ -2,6 +2,7 @@
 import generateDisplayScale from './generateDisplayScale';
 import {standardizeTonic} from '../rendering/convertToDisplayNotes';
 import generateAllNotesArray from '../allNotesArray';
+import {createScale} from "../../model/Scale";
 
 const notes = generateAllNotesArray();
 
@@ -221,34 +222,19 @@ const getIntervalName = (number) => reverseIntervalNamesMap[number];
 
 const intervalNames = Object.keys(intervalNamesMap);
 
-const generateSelectedScale = (tonic, selectedScaleType, mode, scaleRange) => {
-    if (!modes || !modes.hasOwnProperty(selectedScaleType)) {
-        console.error(`Scale type '${selectedScaleType}' not found in modes.`);
-        return {scale: [], displayScale: []};
-    }
-
+const generateSelectedScale = (tonic: string, selectedScaleType: string, mode: string, scaleRange: number) => {
     const scaleType = modes[selectedScaleType];
-
-    if (!scaleType.hasOwnProperty(mode)) {
-        console.error(
-            `Mode '${mode}' not found for scale type '${selectedScaleType}'.`
-        );
-        return [];
+    let intervals = scaleType[mode];
+    if(intervals == null){
+        const keys = Object.keys(scaleType);
+        keys.sort();
+        const firstKey = keys[0];
+        intervals = scaleType[firstKey];
     }
-
-    const intervals = scaleType[mode];
-
-    if (!Array.isArray(intervals)) {
-        console.error(
-            `Intervals for mode '${mode}' in scale type '${selectedScaleType}' are invalid.`
-        );
-        return [];
-    }
-
     const scale = generateScale(tonic, intervals, scaleRange);
     const displayScale = generateDisplayScale(tonic, intervals, scaleRange);
     const numAccidentals = generatenumAccidentals(tonic, mode);
-    return {scale, displayScale, numAccidentals};
+    return createScale(scale, displayScale, numAccidentals)
 };
 
 const generatenumAccidentals = (tonic, mode) => {

@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import {defaultPercussionScale, defaultScale, generateBassScale} from "./Scale";
+import {createScale, defaultPercussionScale, defaultScale, generateBassScale, Scale} from "./Scale";
 import {
     defaultBassInstrumentSettings,
     defaultMetronomeInstrumentSettings,
@@ -13,6 +13,7 @@ import {CacheStorage, Reverb} from "smplr";
 import {StoreActions, StoreState} from './UseStoreTypes';
 import {Instrument} from "./Instrument";
 import {generateMelody} from "./MelodyGenerator";
+import {generateSelectedScale} from "../operations/scale/scaleHandler";
 
 const context = new AudioContext();
 const reverb = new Reverb(context);
@@ -28,7 +29,26 @@ const updateInstrumentMelody = (state: StoreState, instrument: Instrument, newMe
     },
 });
 
-export const useStore = create<StoreState & StoreActions>((set) => ({
+const updateScaleAndInstruments = (state: StoreState, scale : Scale) => {
+    return {
+        ...state,
+        scale: scale,
+        instruments: {
+            ...state.instruments,
+            [Instrument.Treble]: {
+                ...state.instruments[Instrument.Treble],
+                scale: scale,
+            },
+            [Instrument.Bass]: {
+                ...state.instruments[Instrument.Bass],
+                scale: generateBassScale(scale),
+            },
+        }
+    };
+};
+
+
+export const useStore = create<StoreState & StoreActions>((set, get) => ({
     context: context,
     reverb: new Reverb(context),
     storage: new CacheStorage(),
@@ -73,27 +93,63 @@ export const useStore = create<StoreState & StoreActions>((set) => ({
     scale: defaultScale(),
 
     // Setters
-    setTonic: (newTonic) => set({tonic: newTonic}),
-    setSelectedScaleType: (newScaleType) => set({selectedScaleType: newScaleType}),
-    setSelectedMode: (newMode) => set({selectedMode: newMode}),
-    setScaleRange: (newRange) => set({scaleRange: newRange}),
+    setTonic: (newTonic) => set((state) => {
+        try {
+            const scale = generateSelectedScale(
+                newTonic,
+                state.selectedScaleType,
+                state.selectedMode,
+                state.scaleRange
+            );
+            return updateScaleAndInstruments({...state, tonic: newTonic}, scale);
+        } catch (error) {
+            console.error('Error updating current scale', error);
+            return state; // Return the current state if there's an error
+        }
+    }),
+    setSelectedScaleType: (newScaleType) => set((state) => {
+        try {
+            const scale = generateSelectedScale(
+                state.tonic,
+                newScaleType,
+                state.selectedMode,
+                state.scaleRange
+            );
+            return updateScaleAndInstruments({...state, selectedScaleType: newScaleType}, scale);
+        } catch (error) {
+            console.error('Error updating current scale', error);
+            return state;
+        }
+    }),
+    setSelectedMode: (newMode) => set((state) => {
+        try {
+            const scale = generateSelectedScale(
+                state.tonic,
+                state.selectedScaleType,
+                newMode,
+                state.scaleRange
+            );
+            return updateScaleAndInstruments({...state, selectedMode : newMode}, scale);
+        } catch (error) {
+            console.error('Error updating current scale', error);
+            return state;
+        }
+    }),
+    setScaleRange: (newRange) => set((state) => {
+        try {
+            const scale = generateSelectedScale(
+                state.tonic,
+                state.selectedScaleType,
+                state.selectedMode,
+                newRange
+            );
+            return updateScaleAndInstruments({...state, scaleRange : newRange}, scale);
+        } catch (error) {
+            console.error('Error updating current scale', error);
+            return state;
+        }
+    }),
     setSelectedInterval: (newInterval) => set({selectedInterval: newInterval}),
-    setScale: (newScale) =>
-        set((state) => ({
-            ...state,
-            scale: newScale,
-            instruments: {
-                ...state.instruments,  // Preserve all instruments
-                [Instrument.Treble]: {
-                    ...state.instruments[Instrument.Treble],
-                    scale: newScale,
-                },
-                [Instrument.Bass]: {
-                    ...state.instruments[Instrument.Bass],
-                    scale: generateBassScale(newScale),
-                },
-            }
-        })),
     setBpm: (newBpm) => set({bpm: newBpm}),
     setTimeSignature: (newTimeSignature) => set({timeSignature: newTimeSignature}),
     setNumMeasures: (newNumMeasures) => set({numMeasures: newNumMeasures}),

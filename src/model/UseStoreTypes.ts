@@ -42,7 +42,6 @@ interface StoreActions {
     setSelectedMode: (newMode: string) => void;
     setScaleRange: (newRange: number) => void;
     setSelectedInterval: (newInterval: string) => void;
-    setScale: (newScale: Scale) => void;
     setBpm: (newBpm: number) => void;
     setTimeSignature: (newTimeSignature: [number, number]) => void;
     setNumMeasures: (newNumMeasures: number) => void;

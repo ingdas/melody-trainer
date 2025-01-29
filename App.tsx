@@ -4,13 +4,10 @@ import React, {useEffect, useMemo, useRef} from 'react';
 import {Dimensions, Text, TouchableOpacity, View,} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
-import {generateMelody} from './src/model/MelodyGenerator';
-
 import {useFonts} from 'expo-font';
 import generateAllNotesArray from './src/operations/allNotesArray';
 import Keyboard from './src/components/Keyboard';
 import {
-    generateSelectedScale,
     intervalNames,
     intervalNamesMap,
     modes,
@@ -32,10 +29,9 @@ import {ScaleModeSettings} from "./src/components/settings/ScaleModeSettings";
 import {useStore} from "./src/model/UseStore";
 import {InstrumentSettings} from "./src/model/InstrumentSettings";
 
-import {Instrument, InstrumentState} from "./src/model/Instrument";
+import {Instrument} from "./src/model/Instrument";
 import {PercussionSettings} from "./src/components/settings/PercussionSettings";
 import {TempoMetronome} from "./src/components/TempoMetronome";
-import {createScale, defaultPercussionScale, generateBassScale, Scale} from "./src/model/Scale";
 import {updateMetronome} from "./src/model/Melody";
 
 
@@ -56,7 +52,6 @@ const App = () => {
         selectedInterval,
         setSelectedInterval,
         scale,
-        setScale,
         bpm,
         setBpm,
         timeSignature,
@@ -147,24 +142,6 @@ const App = () => {
         setScaleRange(intervalNamesMap[newInterval]);
         setSelectedInterval(newInterval);
     };
-
-    useEffect(() => {
-        const updateCurrentScale = (tonic, selectedMode) => {
-            try {
-                // @ts-ignore
-                const {scale, displayScale, numAccidentals} = generateSelectedScale(
-                    tonic,
-                    selectedScaleType,
-                    selectedMode,
-                    scaleRange
-                );
-                setScale(createScale(scale, displayScale, numAccidentals));
-            } catch (error) {
-                console.error('Error updating current scale', error);
-            }
-        };
-        updateCurrentScale(tonic, selectedMode);
-    }, [tonic, selectedScaleType, selectedMode, scaleRange]);
 
     const playScale = async () => {
         instruments.treble.settings.sound.stop({});
