@@ -1,5 +1,4 @@
 // App.js
-// import { Audio } from 'expo-av';
 import React, {useEffect, useRef} from 'react';
 import {Dimensions, Text, TouchableOpacity, View,} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';

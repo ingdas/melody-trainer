@@ -1,6 +1,6 @@
 import {CacheStorage, Reverb} from "smplr";
 import {InstrumentSettings} from "./InstrumentSettings";
-import {Instruments, InstrumentState, InstrumentType} from "./Instrument";
+import {Instruments, InstrumentType} from "./Instrument";
 import {Scale} from "./Scale";
 import {Melody} from "./Melody";
 
