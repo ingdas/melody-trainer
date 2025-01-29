@@ -5,7 +5,7 @@ import { styles } from './styles';
 
 const PickerButton = ({ onPress, label, icon }) => (
   <TouchableOpacity style={styles.pickerButton} onPress={onPress}>
-    {icon && <FontAwesomeIcon name={icon} size={12} color="#FFF" style={styles.pickerButtonIcon} />}
+    {icon && <FontAwesomeIcon icon={icon} size={"1x"} color="#FFF" style={styles.pickerButtonIcon} />}
     <Text style={styles.pickerButtonText}>{label}</Text>
   </TouchableOpacity>
 );

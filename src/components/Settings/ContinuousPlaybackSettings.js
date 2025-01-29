@@ -1,9 +1,9 @@
-// components/continuousPlayback.js
+// components/ContinuousPlaybackSettings.js
 
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { FileEarmarkMusicFill, EyeSlashFill, Shuffle, Repeat, PlayFill, Pause } from 'react-bootstrap-icons';
-import { colors } from './styles';
+import { colors } from '../styles';
 
 const ToggleButton = ({ active, onPress, activeIcon, passiveIcon, activeColor, iconSource, glyph }) => {
   return (

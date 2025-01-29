@@ -13,36 +13,36 @@ import {
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import Melody from './model/Melody';
-import MelodyGenerator from './model/MelodyGenerator';
-import Scale from './model/Scale';
-import InstrumentSettings from './model/InstrumentSettings';
+import Melody from './src/model/Melody';
+import MelodyGenerator from './src/model/MelodyGenerator';
+import Scale from './src/model/Scale';
+import InstrumentSettings from './src/model/InstrumentSettings';
 
 import { useFonts } from 'expo-font';
-import generateAllNotesArray from './components/allNotesArray';
-import PianoView from './components/PianoView';
+import generateAllNotesArray from './src/operations/allNotesArray';
+import Keyboard from './src/components/Keyboard';
 import {
   generateSelectedScale,
   modes,
   randomTonic,
   tonicOptions,
-  ScaleModeSettings,
   intervalNames,
   intervalNamesMap,
-} from './components/scaleHandler'; // Import relevant functions
-import SheetMusic from './components/SheetMusic'; // Import the SheetMusic component
-import MeasureAndTempo from './components/MeasureAndTempo';
-import { ContinuousPlaybackSettings } from './components/continuousPlayback';
-import TrebleSettings from './components/TrebleSettings';
+} from './src/operations/scaleHandler'; // Import relevant functions
+import SheetMusic from './src/components/SheetMusic'; // Import the SheetMusic component
+import MeasureAndTempoSettings from './src/components/Settings/MeasureAndTempoSettings';
+import { ContinuousPlaybackSettings } from './src/components/Settings/ContinuousPlaybackSettings';
+import TrebleSettings from './src/components/Settings/TrebleSettings';
 import {faGuitar, faPlay} from '@fortawesome/free-solid-svg-icons';
 
-import { styles, colors } from './components/styles';
-import PickerButton from './components/PickerButton';
+import { styles, colors } from './src/components/styles';
+import PickerButton from './src/components/PickerButton';
 
-import playMelodies from './components/playMelodies';
-import playContinuously from './components/playContinuously';
+import playMelodies from './src/operations/playMelodies';
+import playContinuously from './src/operations/playContinuously';
 
 import { Reverb, Soundfont, DrumMachine, CacheStorage } from 'smplr';
+import {ScaleModeSettings} from "./src/components/Settings/ScaleModeSettings";
 
 const context = new AudioContext();
 const reverb = new Reverb(context);
@@ -359,7 +359,7 @@ const App = () => {
 
   const renderPlaybackSettingsScene = SceneMap({
     measure: () => (
-      <MeasureAndTempo
+      <MeasureAndTempoSettings
         bpm={bpm}
         updateBpm={updateBpm}
         timeSignature={timeSignature}
@@ -501,7 +501,7 @@ const App = () => {
       </View>
       <View style={styles.visualizer}>
         <Text style={styles.text}>Piano View</Text>
-        <PianoView
+        <Keyboard
           scaleRange={scaleRange}
           anyTonic={tonic}
           currentScale={scale.scale}
@@ -577,7 +577,7 @@ const App = () => {
       )}
       {measureAndScaleSettingsVisible && (
         <View style={styles.settingsTab}>
-          <MeasureAndTempo
+          <MeasureAndTempoSettings
             bpm={bpm}
             updateBpm={updateBpm}
             timeSignature={timeSignature}

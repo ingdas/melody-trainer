@@ -1,9 +1,9 @@
-// MeasureAndTempo.js
+// MeasureAndTempoSettings.js
 
 import React, { useState } from 'react';
 import { View, Text, Switch, TouchableOpacity } from 'react-native';
-import { styles, colors } from './styles'; 
-import PickerButton from './PickerButton';
+import { styles, colors } from '../styles';
+import PickerButton from '../PickerButton';
 
 const tempoTerms = [
   { bpm: 0, term: 'Larghissimo' },
@@ -33,7 +33,7 @@ const getTempoTerm = (bpm) => {
   return term ? term.term : 'Unknown';
 };
 
-const MeasureAndTempo = ({ timeSignature, setTimeSignature, bpm ,updateBpm, numMeasures, setNumMeasures }) => {
+const MeasureAndTempoSettings = ({ timeSignature, setTimeSignature, bpm ,updateBpm, numMeasures, setNumMeasures }) => {
 
   const increaseBpm = () => {
     const newBpm = bpm + 5;
@@ -114,4 +114,4 @@ const MeasureAndTempo = ({ timeSignature, setTimeSignature, bpm ,updateBpm, numM
   );
 };
 
-export default MeasureAndTempo;
+export default MeasureAndTempoSettings;

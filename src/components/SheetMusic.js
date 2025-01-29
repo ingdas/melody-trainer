@@ -4,12 +4,12 @@ import React from 'react';
 import { View } from 'react-native';
 import { Svg, Path, Text as SvgText } from 'react-native-svg';
 import { useFonts } from 'expo-font';
-import { processMelodyAndCalculateSlots } from './processMelodyAndCalculateSlots';
-import { processMelodyAndCalculateFlags } from './processMelodyAndCalculateFlags';
+import { processMelodyAndCalculateSlots } from '../operations/processMelodyAndCalculateSlots';
+import { processMelodyAndCalculateFlags } from '../operations/processMelodyAndCalculateFlags';
 
-import { renderMelodyNotes } from './renderMelodyNotes';
-import renderAccidentals from './renderAccidentals';
-import calculateAllTimeStamps from './calculateAllTimeStamps';
+import { renderMelodyNotes } from '../operations/renderMelodyNotes';
+import renderAccidentals from '../operations/renderAccidentals';
+import calculateAllTimeStamps from '../operations/calculateAllTimeStamps';
 
 const SheetMusic = ({
   timeSignature,
@@ -20,7 +20,7 @@ const SheetMusic = ({
   screenWidth,
 }) => {
   const [fontsLoaded] = useFonts({
-    Maestro: require('../assets/fonts/maestro.ttf'),
+    Maestro: require('../../assets/fonts/maestro.ttf'),
   });
 
   let noteGroupSize = 12;
