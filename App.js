@@ -1,44 +1,39 @@
 // App.js
 // import { Audio } from 'expo-av';
-import React, { useState, useMemo, useEffect, useRef } from 'react';
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
-import { SceneMap, TabBar } from 'react-native-tab-view';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {Dimensions, Text, TouchableOpacity, View,} from 'react-native';
+import {SceneMap, TabBar} from 'react-native-tab-view';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 import Melody from './src/model/Melody';
 import MelodyGenerator from './src/model/MelodyGenerator';
 import Scale from './src/model/Scale';
-import InstrumentSettings from './src/model/InstrumentSettings';
 
-import { useFonts } from 'expo-font';
+import {useFonts} from 'expo-font';
 import generateAllNotesArray from './src/operations/allNotesArray';
 import Keyboard from './src/components/Keyboard';
 import {
   generateSelectedScale,
+  intervalNames,
+  intervalNamesMap,
   modes,
   randomTonic,
   tonicOptions,
-  intervalNames,
-  intervalNamesMap,
 } from './src/operations/scale/scaleHandler'; // Import relevant functions
 import SheetMusic from './src/components/SheetMusic'; // Import the SheetMusic component
 import MeasureAndTempoSettings from './src/components/settings/MeasureAndTempoSettings';
-import { ContinuousPlaybackSettings } from './src/components/settings/ContinuousPlaybackSettings';
+import {ContinuousPlaybackSettings} from './src/components/settings/ContinuousPlaybackSettings';
 import TrebleSettings from './src/components/settings/TrebleSettings';
 import {faGuitar, faPlay} from '@fortawesome/free-solid-svg-icons';
 
-import { styles, colors } from './src/components/generic/styles';
+import {colors, styles} from './src/components/generic/styles';
 
 import playMelodies from './src/operations/playback/playMelodies';
 import playContinuously from './src/operations/playback/playContinuously';
 
-import { Reverb, Soundfont, DrumMachine, CacheStorage } from 'smplr';
+import {CacheStorage, DrumMachine, Reverb, Soundfont} from 'smplr';
 import {ScaleModeSettings} from "./src/components/settings/ScaleModeSettings";
+import {useStore} from "./model/UseStore";
 
 const context = new AudioContext();
 const reverb = new Reverb(context);
@@ -50,68 +45,75 @@ const TempoMetronome = () => (
   </View>
 );
 
+
+
 const App = () => {
   useFonts({
     Maestro: require('./assets/fonts/maestro.ttf'),
   });
 
+  const {
+    tonic,
+    setTonic,
+    selectedScaleType,
+    setSelectedScaleType,
+    selectedMode,
+    setSelectedMode,
+    scaleRange,
+    setScaleRange,
+    selectedInterval,
+    setSelectedInterval,
+    scale,
+    setScale,
+    trebleInstrumentSettings,
+    setTrebleInstrumentSettings,
+    bassInstrumentSettings,
+    percussionInstrumentSettings,
+    metronomeInstrumentSettings,
+    trebleMelody,
+    setTrebleMelody,
+    bassMelody,
+    setBassMelody,
+    percussionMelody,
+    setPercussionMelody,
+    metronomeMelody,
+    setMetronomeMelody,
+    bpm,
+    setBpm,
+    timeSignature,
+    setTimeSignature,
+    numMeasures,
+    setNumMeasures,
+    isPlayingContinuously,
+    setIsPlayingContinuously,
+    setStopPlayback,
+    screenWidth,
+    setScreenWidth,
+    isTonicModalVisible,
+    isScaleTypeModalVisible,
+    isModeModalVisible,
+  } = useStore();
+
   const allNotesArray = useMemo(() => generateAllNotesArray(), []);
 
-  const [tonic, setTonic] = useState('C4'); // Default to C
-  const [selectedScaleType, setSelectedScaleType] = useState('Diatonic'); // Default to Diatonic
-  const [selectedMode, setSelectedMode] = useState('I. Ionian (Major)'); // Default to Ionian (Major)
-  const [scaleRange, setScaleRange] = useState(12); // Default melody range (one octave)
-  const [selectedInterval, setSelectedInterval] = useState('Octave');
-
-  const [scale, setScale] = useState(Scale.defaultScale());
   const percussionScale = Scale.defaultPercussionScale();
-  const [trebleInstrumentSettings, setTrebleInstrumentSettings] = useState(
-    InstrumentSettings.defaultTrebleInstrumentSettings()
-  );
   const trebleInstrument = new Soundfont(context, {
     instrument: trebleInstrumentSettings.instrument,
     storage: storage,
   });
   trebleInstrument.output.addEffect('reverb', reverb, 0.1);
-  const [bassInstrumentSettings, setBassInstrumentSettings] = useState(
-    InstrumentSettings.defaultBassInstrumentSettings()
-  );
   const bassInstrument = new Soundfont(context, {
     instrument: bassInstrumentSettings.instrument,
     storage: storage,
   });
-  const [percussionInstrumentSettings, setPercussionInstrumentSettings] =
-    useState(InstrumentSettings.defaultPercussionInstrumentSettings());
   const percussionInstrument = new DrumMachine(context, {
     instrument: percussionInstrumentSettings.instrument,
     storage: storage,
   });
-  const [metronomeInstrumentSettings, setMetronmeInstrumentSettings] = useState(
-    InstrumentSettings.defaultMetronomeInstrumentSettings()
-  );
   const metronomeInstrument = new Soundfont(context, {
     instrument: metronomeInstrumentSettings.instrument,
     storage: storage,
   });
-
-  const [trebleMelody, setTrebleMelody] = useState(
-    Melody.defaultTrebleMelody()
-  );
-  const [bassMelody, setBassMelody] = useState(Melody.defaultBassMelody());
-  const [percussionMelody, setPercussionMelody] = useState(
-    Melody.defaultPercussionMelody()
-  );
-  const [metronomeMelody, setMetronomeMelody] = useState(
-    Melody.defaultMetronomeMelody()
-  );
-
-  const [bpm, setBpm] = useState(120);
-  const [timeSignature, setTimeSignature] = useState([4, 4]);
-  const [numMeasures, setNumMeasures] = useState(2);
-
-  // Hanlde Buttons
-  const [isPlayingContinuously, setIsPlayingContinuously] = useState(false);
-  const [stopPlayback, setStopPlayback] = useState(false);
 
   // State Handlers
   const abortControllerRef = useRef(null);
@@ -120,10 +122,6 @@ const App = () => {
     const updatedMetronome = Melody.updateMetronome(timeSignature, numMeasures);
     setMetronomeMelody(updatedMetronome);
   }, [timeSignature, numMeasures]);
-
-  const [screenWidth, setScreenWidth] = useState(
-    Dimensions.get('window').width
-  );
 
   useEffect(() => {
     const handleResize = () => {
@@ -136,12 +134,6 @@ const App = () => {
       Dimensions.removeEventListener('change', handleResize);
     };
   }, []);
-
-  // Modal Views
-  const [isTonicModalVisible, setTonicModalVisible] = useState(false);
-  const [isScaleTypeModalVisible, setScaleTypeModalVisible] = useState(false);
-  const [isModeModalVisible, setModeModalVisible] = useState(false);
-  const [isIntervalModalVisible, setIntervalModalVisible] = useState(false); // Modal visibility state for interval picker
 
   // melody
   const generateMelody = () => {
