@@ -1,0 +1,37 @@
+{
+  "main": "expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "expo": "~51.0.28",
+    "expo-status-bar": "~1.12.1",
+    "react": "18.2.0",
+    "react-native": "0.74.5",
+    "smplr": "*",
+    "expo-av": "~14.0.7",
+    "expo-font": "~12.0.9",
+    "react-native-svg": "15.2.0",
+    "@expo/vector-icons": "^14.0.2",
+    "react-native-paper": "4.9.2",
+    "react-bootstrap-icons": "*",
+    "react-native-tab-view": "*",
+    "react-native-pager-view": "6.3.0",
+    "react-native-vector-icons": "*",
+    "react-native-bootstrap-icons": "*",
+    "@fortawesome/react-fontawesome": "*",
+    "@fortawesome/fontawesome-svg-core": "*",
+    "@fortawesome/free-solid-svg-icons": "*",
+    "@fortawesome/react-native-fontawesome": "*",
+    "react-native-web": "~0.19.10",
+    "react-dom": "18.2.0",
+    "@expo/metro-runtime": "~3.2.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0"
+  },
+  "private": true
+}
