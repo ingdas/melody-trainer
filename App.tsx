@@ -1,6 +1,6 @@
 // App.js
 // import { Audio } from 'expo-av';
-import React, {useEffect, useMemo, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Dimensions, Text, TouchableOpacity, View,} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
@@ -10,6 +10,8 @@ import {
     intervalNames,
     intervalNamesMap,
     modes,
+    randomMode,
+    randomScale,
     randomTonic,
     tonicOptions,
 } from './src/operations/scale/scaleHandler';
@@ -109,19 +111,18 @@ const App = () => {
     };
 
     const handleRandomizeScaleType = () => {
-        const newTonic = randomTonic(); // Get random tonic
-        setTonic(newTonic);
+        setSelectedScaleType(randomScale());
+        setSelectedMode(randomMode(selectedScaleType));
     };
 
     const handleRandomizeMode = () => {
-        const newTonic = randomTonic(); // Get random tonic
-        setTonic(newTonic);
+        setSelectedMode(randomMode(selectedScaleType));
     };
 
-    const chooseScaleType = (selectedScaleType) => {
-        const scaleTypeModes = modes[selectedScaleType];
+    const chooseScaleType = (newScaleType : string) => {
+        const scaleTypeModes = modes[newScaleType];
         const modesArray = Object.keys(scaleTypeModes);
-        setSelectedScaleType(selectedScaleType);
+        setSelectedScaleType(newScaleType);
         setSelectedMode(modesArray[0]);
     };
 
@@ -187,7 +188,6 @@ const App = () => {
 
     const handleStopAllPlayback = () => {
         setStopPlayback(true);
-        // context.close();
         instruments.treble.settings.sound.stop({});
         instruments.bass.settings.sound.stop({});
         instruments.percussion.settings.sound.stop({});
@@ -236,15 +236,6 @@ const App = () => {
     };
 
     // Definitions for VIEWS
-    const tabSymbols = {
-        treble: '&', // treble clef
-        bass: '?', // bass clef
-        percussion: '/', // neutral clef
-        measure: 'c', // treble clef
-        scale: '#  b', // bass clef
-        playback: '}', // neutral clef
-    };
-
     return (
         <View style={styles.container}>
             <View style={styles.visualizer}>

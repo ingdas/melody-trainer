@@ -298,33 +298,18 @@ const generateScale = (anyTonic, intervals, scaleRange) => {
 
 const scaleTypes = Object.keys(modes);
 
-const randomScale = (
-    scaleTypes,
-    modes,
-    setSelectedScaleType,
-    setSelectedMode
-) => {
-    const randomScaleType =
-        scaleTypes[Math.floor(Math.random() * scaleTypes.length)];
-    const scaleTypeModes = modes[randomScaleType];
-    const modesArray = Object.keys(scaleTypeModes);
-    const randomMode = modesArray[Math.floor(Math.random() * modesArray.length)];
-
-    setSelectedScaleType(randomScaleType);
-    setSelectedMode(randomMode);
+const randomScale = () => {
+    return scaleTypes[Math.floor(Math.random() * scaleTypes.length)];
 };
 
-const randomMode = (selectedScaleType, modes, setSelectedMode) => {
+const randomMode = (selectedScaleType) => {
     if (!modes.hasOwnProperty(selectedScaleType)) {
         console.error(`Scale type '${selectedScaleType}' not found in modes.`);
         return;
     }
 
     const scaleTypeModes = Object.keys(modes[selectedScaleType]);
-    const randomMode =
-        scaleTypeModes[Math.floor(Math.random() * scaleTypeModes.length)];
-
-    setSelectedMode(randomMode);
+    return scaleTypeModes[Math.floor(Math.random() * scaleTypeModes.length)];
 };
 
 const randomTonic = () => {
