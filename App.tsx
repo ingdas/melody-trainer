@@ -31,11 +31,11 @@ import {colors, styles} from './src/components/generic/styles';
 import playMelodies from './src/operations/playback/playMelodies';
 import playContinuously from './src/operations/playback/playContinuously';
 
-import {DrumMachine, Soundfont} from 'smplr';
 import {ScaleModeSettings} from "./src/components/settings/ScaleModeSettings";
-import {Instrument, useStore} from "./src/model/UseStore";
-import type InstrumentSettings from "./src/model/InstrumentSettings";
-import trebleSettings from "./src/components/settings/TrebleSettings";
+import {useStore} from "./src/model/UseStore";
+import {InstrumentSettings} from "./src/model/InstrumentSettings";
+
+import {Instrument} from "./src/model/Instrument";
 
 const TempoMetronome = () => (
     <View style={styles.tempoMetronome}>
@@ -77,8 +77,6 @@ const App = () => {
         isScaleTypeModalVisible,
         isModeModalVisible,
         context,
-        storage,
-        reverb,
         instruments,
         setTonicModalVisible,
         setScaleTypeModalVisible,
@@ -86,11 +84,6 @@ const App = () => {
         setInstrumentMelody,
         setInstrumentSettings
     } = useStore();
-
-    const treble = instruments[Instrument.Treble];
-    const {settings: bassSettings, melody: bassMelody} = instruments[Instrument.Bass];
-    const {settings: percussionSettings, melody: percussionMelody} = instruments[Instrument.Percussion];
-    const {settings: metronomeSettings, melody: metronomeMelody} = instruments[Instrument.Metronome];
 
     const allNotesArray = useMemo(() => generateAllNotesArray(), []);
 
@@ -112,35 +105,28 @@ const App = () => {
     }, []);
 
     // melody
-    const generateMelody = () => {
+    const generateMelody = (settings: InstrumentSettings) => {
+        let myScale: Scale = scale;
+        switch (settings.type) {
+            case Instrument.Metronome:
+            case Instrument.Treble:
+                break;
+            case Instrument.Bass:
+                myScale = scale.generateBassScale();
+                break;
+            case Instrument.Percussion:
+                myScale = percussionScale;
+                break;
+        }
         const newMelody = new MelodyGenerator(
-            scale,
+            myScale,
             numMeasures,
             timeSignature,
-            treble.settings
+            settings
         ).generateMelody();
-        setInstrumentMelody(Instrument.Treble, newMelody);
-    };
+        setInstrumentMelody(settings.type, newMelody);
+    }
 
-    const generateBassLine = () => {
-        const newMelody = new MelodyGenerator(
-            scale.generateBassScale(),
-            numMeasures,
-            timeSignature,
-            bassSettings
-        ).generateMelody();
-        setInstrumentMelody(Instrument.Bass, newMelody);
-    };
-
-    const generatePercussion = () => {
-        const newMelody = new MelodyGenerator(
-            percussionScale,
-            numMeasures,
-            timeSignature,
-            percussionSettings
-        ).generateMelody();
-        setInstrumentMelody(Instrument.Percussion, newMelody);
-    };
 
     // MEASURE AND TEMPO HANDLING
     const updateBpm = (newBpm) => {
@@ -205,13 +191,13 @@ const App = () => {
     }, [tonic, selectedScaleType, selectedMode, scaleRange]);
 
     const playScale = async () => {
-        treble.settings.sound.stop({});
-        bassSettings.sound.stop({});
-        percussionSettings.sound.stop({});
-        metronomeSettings.sound.stop({});
+        instruments.treble.settings.sound.stop({});
+        instruments.bass.settings.sound.stop({});
+        instruments.percussion.settings.sound.stop({});
+        instruments.metronome.settings.sound.stop({});
         await playMelodies(
             [scale],
-            [treble.settings.sound],
+            [instruments.treble.settings.sound],
             context,
             bpm,
             context.currentTime
@@ -221,8 +207,8 @@ const App = () => {
     const playAllMelodies = async () => {
         handleStopAllPlayback();
         await playMelodies(
-            [treble.melody, bassMelody, percussionMelody],
-            [treble.settings.sound, bassSettings.sound, percussionSettings.sound],
+            [instruments.treble.melody, instruments.bass.melody, instruments.percussion.melody],
+            [instruments.treble.settings.sound, instruments.bass.settings.sound, instruments.percussion.settings.sound],
             context,
             bpm,
             context.currentTime
@@ -242,21 +228,21 @@ const App = () => {
                 timeSignature,
                 numMeasures,
                 context,
-                treble.melody,
-                bassMelody,
-                percussionMelody,
-                metronomeMelody,
+                instruments.treble.melody,
+                instruments.bass.melody,
+                instruments.percussion.melody,
+                instruments.metronome.melody,
                 scale,
                 scale.generateBassScale(),
                 percussionScale,
-                treble.settings.sound,
-                bassSettings.sound,
-                percussionSettings.sound,
-                metronomeSettings.sound,
-                treble.settings,
-                bassSettings,
-                percussionSettings,
-                metronomeSettings,
+                instruments.treble.settings.sound,
+                instruments.bass.settings.sound,
+                instruments.percussion.settings.sound,
+                instruments.metronome.settings.sound,
+                instruments.treble.settings,
+                instruments.bass.settings,
+                instruments.percussion.settings,
+                instruments.metronome.settings,
                 (x: Melody) => setInstrumentMelody(Instrument.Treble, x),
                 (x: Melody) => setInstrumentMelody(Instrument.Bass, x),
                 (x: Melody) => setInstrumentMelody(Instrument.Percussion, x)
@@ -267,10 +253,10 @@ const App = () => {
     const handleStopAllPlayback = () => {
         setStopPlayback(true);
         // context.close();
-        treble.settings.sound.stop({});
-        bassSettings.sound.stop({});
-        percussionSettings.sound.stop({});
-        metronomeSettings.sound.stop({});
+        instruments.treble.settings.sound.stop({});
+        instruments.bass.settings.sound.stop({});
+        instruments.percussion.settings.sound.stop({});
+        instruments.metronome.settings.sound.stop({});
         setIsPlayingContinuously(false);
         // Immediately abort the current playback
         if (abortControllerRef.current) {
@@ -408,9 +394,9 @@ const App = () => {
                 <Text style={styles.text}>Melody Visualizer</Text>
                 <SheetMusic
                     timeSignature={timeSignature}
-                    trebleMelody={treble.melody}
-                    bassMelody={bassMelody}
-                    percussionMelody={percussionMelody}
+                    trebleMelody={instruments.treble.melody}
+                    bassMelody={instruments.bass.melody}
+                    percussionMelody={instruments.percussion.melody}
                     numAccidentals={scale.numAccidentals}
                     screenWidth={screenWidth}
                 />
@@ -449,17 +435,17 @@ const App = () => {
                 <View style={styles.pickerRow}>
                     <TouchableOpacity
                         style={styles.pickerButton}
-                        onPress={generateMelody}>
+                        onPress={() => generateMelody(instruments.treble.settings)}>
                         <Text style={styles.pickerButtonText}> Randomize Melody </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.pickerButton}
-                        onPress={generateBassLine}>
+                        onPress={() => generateMelody(instruments.bass.settings)}>
                         <Text style={styles.pickerButtonText}> Randomize Bass Line </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.pickerButton}
-                        onPress={generatePercussion}>
+                        onPress={() => generateMelody(instruments.percussion.settings)}>
                         <Text style={styles.pickerButtonText}> Randomize Percussion </Text>
                     </TouchableOpacity>
                 </View>
@@ -473,7 +459,7 @@ const App = () => {
                     currentDisplayScale={scale.displayScale}
                     notes={allNotesArray}
                     context={context}
-                    trebleInstrument={treble.settings.sound}
+                    trebleInstrument={instruments.treble.settings.sound}
                 />
                 <View style={styles.paddingRow}/>
             </View>
@@ -577,8 +563,8 @@ const App = () => {
             {instrumentSettingsVisible && (
                 <View style={styles.settingsTab}>
                     <TrebleSettings
-                        trebleInstrumentSettings={treble.settings}
-                        setTrebleInstrumentSettings={(newSettings : InstrumentSettings) => setInstrumentSettings(Instrument.Treble, newSettings)}
+                        trebleInstrumentSettings={instruments.treble.settings}
+                        setTrebleInstrumentSettings={(newSettings: InstrumentSettings) => setInstrumentSettings(Instrument.Treble, newSettings)}
                     />
                 </View>
             )}

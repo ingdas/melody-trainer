@@ -1,5 +1,6 @@
-import { Instrument } from "./UseStore";
 import { DrumMachine, Soundfont } from "smplr";
+
+import {Instrument} from "./Instrument";
 
 type InstrumentSettings = {
     instrument: string;
