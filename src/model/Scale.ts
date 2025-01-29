@@ -84,7 +84,7 @@ function generateBassScale(scale: Scale): Scale {
 }
 
 export {
-    Scale,
+    type Scale,
     createScale,
     defaultScale,
     defaultPercussionScale,

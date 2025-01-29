@@ -7,20 +7,26 @@ import {
     defaultTrebleInstrumentSettings,
     updateSound
 } from "./InstrumentSettings";
-import {
-    defaultBassMelody,
-    defaultMetronomeMelody,
-    defaultPercussionMelody,
-    defaultTrebleMelody
-} from "./Melody";
+import {defaultBassMelody, defaultMetronomeMelody, defaultPercussionMelody, defaultTrebleMelody} from "./Melody";
 import {Dimensions} from "react-native";
 import {CacheStorage, Reverb} from "smplr";
 import {StoreActions, StoreState} from './UseStoreTypes';
 import {Instrument} from "./Instrument";
+import {generateMelody} from "./MelodyGenerator";
 
 const context = new AudioContext();
 const reverb = new Reverb(context);
 const storage = new CacheStorage();
+
+const updateInstrumentMelody = (state: StoreState, instrument: Instrument, newMelody: any) => ({
+    instruments: {
+        ...state.instruments,
+        [instrument]: {
+            ...state.instruments[instrument],
+            melody: newMelody,
+        },
+    },
+});
 
 export const useStore = create<StoreState & StoreActions>((set) => ({
     context: context,
@@ -111,15 +117,17 @@ export const useStore = create<StoreState & StoreActions>((set) => ({
         }),
 
     setInstrumentMelody: (instrument, newMelody) =>
-        set((state) => ({
-            instruments: {
-                ...state.instruments,
-                [instrument]: {
-                    ...state.instruments[instrument],
-                    melody: newMelody,
-                },
-            },
-        })),
+        set((state) => updateInstrumentMelody(state, instrument, newMelody)),
+
+    randomizeMelody: (instrument) =>
+        set((state) => {
+            const newMelody = generateMelody({
+                numMeasures: state.numMeasures,
+                timeSignature: state.timeSignature,
+                instrumentState: state.instruments[instrument]
+            });
+            return updateInstrumentMelody(state, instrument, newMelody);
+        }),
 
     // Modal Visibility
     isTonicModalVisible: false,
@@ -130,4 +138,13 @@ export const useStore = create<StoreState & StoreActions>((set) => ({
     setScaleTypeModalVisible: (isVisible) => set({isScaleTypeModalVisible: isVisible}),
     setModeModalVisible: (isVisible) => set({isModeModalVisible: isVisible}),
     setIntervalModalVisible: (isVisible) => set({isIntervalModalVisible: isVisible}),
+
+    isMeasureAndScaleSettingsVisible: false,
+    isPlaybackSettingsVisible: false,
+    isInstrumentSettingsVisible: false,
+    isPercussionSettingsVisible: false,
+    setMeasureAndScaleSettingsVisible: (isVisible) => set({isMeasureAndScaleSettingsVisible: isVisible}),
+    setPlaybackSettingsVisible: (isVisible) => set({isPlaybackSettingsVisible: isVisible}),
+    setInstrumentSettingsVisible: (isVisible) => set({isInstrumentSettingsVisible: isVisible}),
+    setPercussionSettingsVisible: (isVisible) => set({isPercussionSettingsVisible: isVisible}),
 }));

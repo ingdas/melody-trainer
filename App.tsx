@@ -1,8 +1,7 @@
 // App.js
 // import { Audio } from 'expo-av';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef} from 'react';
 import {Dimensions, Text, TouchableOpacity, View,} from 'react-native';
-import {SceneMap, TabBar} from 'react-native-tab-view';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 import {generateMelody} from './src/model/MelodyGenerator';
@@ -72,13 +71,22 @@ const App = () => {
         isTonicModalVisible,
         isScaleTypeModalVisible,
         isModeModalVisible,
+        isMeasureAndScaleSettingsVisible,
+        isPlaybackSettingsVisible,
+        isInstrumentSettingsVisible,
+        isPercussionSettingsVisible,
         context,
         instruments,
         setTonicModalVisible,
         setScaleTypeModalVisible,
         setModeModalVisible,
         setInstrumentMelody,
-        setInstrumentSettings
+        randomizeMelody,
+        setInstrumentSettings,
+        setMeasureAndScaleSettingsVisible,
+        setPlaybackSettingsVisible,
+        setInstrumentSettingsVisible,
+        setPercussionSettingsVisible
     } = useStore();
 
     const allNotesArray = useMemo(() => generateAllNotesArray(), []);
@@ -100,16 +108,6 @@ const App = () => {
             subscription.remove();
         };
     }, []);
-
-    // melody
-    const setNewMelody = (instrumentState: InstrumentState) => {
-        const newMelody = generateMelody({
-            numMeasures,
-            timeSignature,
-            instrumentState
-        });
-        setInstrumentMelody(instrumentState.settings.type, newMelody);
-    }
 
     // SCALE AND MODE HANDLING
     const handleRandomizeTonic = () => {
@@ -234,16 +232,8 @@ const App = () => {
     };
 
     // TOGGLE VIEWS
-    const [measureAndScaleSettingsVisible, setMeasureAndScaleSettingsVisible] =
-        useState(false);
-    const [playbackSettingsVisible, setPlaybackSettingsVisible] = useState(false);
-    const [instrumentSettingsVisible, setInstrumentSettingsVisible] =
-        useState(false);
-    const [percussionSettingsVisible, setPercussionSettingsVisible] =
-        useState(false);
-
     const handleToggleMeasureAndScaleSettings = () => {
-        setMeasureAndScaleSettingsVisible(!measureAndScaleSettingsVisible);
+        setMeasureAndScaleSettingsVisible(!isMeasureAndScaleSettingsVisible);
         setPlaybackSettingsVisible(false);
         setInstrumentSettingsVisible(false);
         setPercussionSettingsVisible(false);
@@ -251,7 +241,7 @@ const App = () => {
 
     const handleTogglePlaybackSettings = () => {
         setMeasureAndScaleSettingsVisible(false);
-        setPlaybackSettingsVisible(!playbackSettingsVisible);
+        setPlaybackSettingsVisible(!isPlaybackSettingsVisible);
         setInstrumentSettingsVisible(false);
         setPercussionSettingsVisible(false);
     };
@@ -259,7 +249,7 @@ const App = () => {
     const handleToggleInstrumentSettings = () => {
         setMeasureAndScaleSettingsVisible(false);
         setPlaybackSettingsVisible(false);
-        setInstrumentSettingsVisible(!instrumentSettingsVisible);
+        setInstrumentSettingsVisible(!isInstrumentSettingsVisible);
         setPercussionSettingsVisible(false);
     };
 
@@ -267,46 +257,8 @@ const App = () => {
         setMeasureAndScaleSettingsVisible(false);
         setPlaybackSettingsVisible(false);
         setInstrumentSettingsVisible(false);
-        setPercussionSettingsVisible(!percussionSettingsVisible);
+        setPercussionSettingsVisible(!isPercussionSettingsVisible);
     };
-
-    const renderPlaybackSettingsScene = SceneMap({
-        measure: () => (
-            <MeasureAndTempoSettings
-                bpm={bpm}
-                updateBpm={setBpm}
-                timeSignature={timeSignature}
-                setTimeSignature={setTimeSignature}
-                numMeasures={numMeasures}
-                setNumMeasures={setNumMeasures}
-            />
-        ),
-        scale: () => (
-            <ScaleModeSettings
-                currentDisplayScale={scale.displayScale}
-                tonic={tonic}
-                setTonic={setTonic}
-                isTonicModalVisible={isTonicModalVisible}
-                setTonicModalVisible={setTonicModalVisible}
-                tonicOptions={tonicOptions}
-                handleRandomizeTonic={handleRandomizeTonic}
-                selectedScaleType={selectedScaleType}
-                chooseScaleType={chooseScaleType}
-                isScaleTypeModalVisible={isScaleTypeModalVisible}
-                setScaleTypeModalVisible={setScaleTypeModalVisible}
-                handleRandomizeScaleType={handleRandomizeScaleType}
-                selectedMode={selectedMode}
-                setSelectedMode={setSelectedMode}
-                isModeModalVisible={isModeModalVisible}
-                setModeModalVisible={setModeModalVisible}
-                handleRandomizeMode={handleRandomizeMode}
-                scaleRange={scaleRange}
-                increaseScaleRange={increaseScaleRange}
-                decreaseScaleRange={decreaseScaleRange}
-            />
-        ),
-        playback: ContinuousPlaybackSettings,
-    });
 
     // Definitions for VIEWS
     const tabSymbols = {
@@ -318,38 +270,6 @@ const App = () => {
         playback: '}', // neutral clef
     };
 
-    // PICKER MODALS
-
-    const CustomTabBar = (props) => {
-        return (
-            <TabBar
-                style={styles.tabBar}
-                {...props}
-                renderLabel={({route, focused, color}) => (
-                    <View
-                        style={[
-                            styles.tabBar,
-                            {flexDirection: 'row', alignItems: 'center'},
-                        ]}>
-                        <Text style={{fontFamily: 'Maestro', fontSize: 18, color}}>
-                            {tabSymbols[route.key]} {/* Display the correct symbol */}
-                        </Text>
-                        <Text
-                            style={{
-                                fontFamily: 'System',
-                                fontSize: 14,
-                                color,
-                                marginLeft: 5,
-                            }}>
-                            {route.title} {/* Use the standard font for the title */}
-                        </Text>
-                    </View>
-                )}
-            />
-        );
-    };
-
-    // OUTPUT
     return (
         <View style={styles.container}>
             <View style={styles.visualizer}>
@@ -397,17 +317,17 @@ const App = () => {
                 <View style={styles.pickerRow}>
                     <TouchableOpacity
                         style={styles.pickerButton}
-                        onPress={() => setNewMelody(instruments.treble)}>
+                        onPress={() => randomizeMelody(Instrument.Treble)}>
                         <Text style={styles.pickerButtonText}> Randomize Melody </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.pickerButton}
-                        onPress={() => setNewMelody(instruments.bass)}>
+                        onPress={() => randomizeMelody(Instrument.Bass)}>
                         <Text style={styles.pickerButtonText}> Randomize Bass Line </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.pickerButton}
-                        onPress={() => setNewMelody(instruments.percussion)}>
+                        onPress={() => randomizeMelody(Instrument.Percussion)}>
                         <Text style={styles.pickerButtonText}> Randomize Percussion </Text>
                     </TouchableOpacity>
                 </View>
@@ -431,17 +351,17 @@ const App = () => {
             <View
                 style={[
                     styles.tabToggleContainer,
-                    measureAndScaleSettingsVisible ||
-                    playbackSettingsVisible ||
-                    instrumentSettingsVisible ||
-                    percussionSettingsVisible
+                    isMeasureAndScaleSettingsVisible ||
+                    isPlaybackSettingsVisible ||
+                    isInstrumentSettingsVisible ||
+                    isPercussionSettingsVisible
                         ? {bottom: '50%'}
                         : {bottom: 0},
                 ]}>
                 <TouchableOpacity
                     style={[
                         styles.tabToggle,
-                        measureAndScaleSettingsVisible
+                        isMeasureAndScaleSettingsVisible
                             ? {backgroundColor: colors.measureAndScaleActive}
                             : {backgroundColor: colors.measureAndScalePassive},
                     ]}
@@ -452,7 +372,7 @@ const App = () => {
                 <TouchableOpacity
                     style={[
                         styles.tabToggle,
-                        playbackSettingsVisible
+                        isPlaybackSettingsVisible
                             ? {backgroundColor: colors.playbackActive}
                             : {backgroundColor: colors.playbackPassive},
                     ]}
@@ -463,7 +383,7 @@ const App = () => {
                 <TouchableOpacity
                     style={[
                         styles.tabToggle,
-                        instrumentSettingsVisible
+                        isInstrumentSettingsVisible
                             ? {backgroundColor: colors.instrumentsActive}
                             : {backgroundColor: colors.instrumentsPassive},
                     ]}
@@ -474,7 +394,7 @@ const App = () => {
                 <TouchableOpacity
                     style={[
                         styles.tabToggle,
-                        percussionSettingsVisible
+                        isPercussionSettingsVisible
                             ? {backgroundColor: colors.percussionActive}
                             : {backgroundColor: colors.percussionPassive},
                     ]}
@@ -483,12 +403,12 @@ const App = () => {
                     <Text style={styles.tabTitle}> Percussion</Text>
                 </TouchableOpacity>
             </View>
-            {playbackSettingsVisible && (
+            {isPlaybackSettingsVisible && (
                 <View style={[styles.settingsTab, styles.playbackSettingsTab]}>
                     <ContinuousPlaybackSettings/>
                 </View>
             )}
-            {measureAndScaleSettingsVisible && (
+            {isMeasureAndScaleSettingsVisible && (
                 <View style={styles.settingsTab}>
                     <MeasureAndTempoSettings
                         bpm={bpm}
@@ -522,7 +442,7 @@ const App = () => {
                     />
                 </View>
             )}
-            {instrumentSettingsVisible && (
+            {isInstrumentSettingsVisible && (
                 <View style={styles.settingsTab}>
                     <TrebleSettings
                         trebleInstrumentSettings={instruments.treble.settings}
@@ -530,7 +450,7 @@ const App = () => {
                     />
                 </View>
             )}
-            {percussionSettingsVisible && (
+            {isPercussionSettingsVisible && (
                 <View style={styles.settingsTab}>
                     <PercussionSettings/>
                 </View>

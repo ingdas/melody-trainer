@@ -1,6 +1,6 @@
 import {CacheStorage, Reverb} from "smplr";
 import {InstrumentSettings} from "./InstrumentSettings";
-import {Instruments, InstrumentType} from "./Instrument";
+import {Instruments, InstrumentState, InstrumentType} from "./Instrument";
 import {Scale} from "./Scale";
 import {Melody} from "./Melody";
 
@@ -30,6 +30,10 @@ interface StoreState {
     isScaleTypeModalVisible: boolean;
     isModeModalVisible: boolean;
     isIntervalModalVisible: boolean;
+    isMeasureAndScaleSettingsVisible: boolean,
+    isPlaybackSettingsVisible: boolean,
+    isInstrumentSettingsVisible: boolean,
+    isPercussionSettingsVisible: boolean,
 }
 
 interface StoreActions {
@@ -47,10 +51,15 @@ interface StoreActions {
     setScreenWidth: (newWidth: number) => void;
     setInstrumentSettings: (instrument: InstrumentType, newSettings: InstrumentSettings) => void;
     setInstrumentMelody: (instrument: InstrumentType, newMelody: Melody) => void;
+    randomizeMelody: (instrument: InstrumentType) => void;
     setTonicModalVisible: (isVisible: boolean) => void;
     setScaleTypeModalVisible: (isVisible: boolean) => void;
     setModeModalVisible: (isVisible: boolean) => void;
     setIntervalModalVisible: (isVisible: boolean) => void;
+    setMeasureAndScaleSettingsVisible: (isVisible: boolean) => void;
+    setPlaybackSettingsVisible: (isVisible: boolean) => void;
+    setInstrumentSettingsVisible: (isVisible: boolean) => void;
+    setPercussionSettingsVisible: (isVisible: boolean) => void;
 }
 
 export {StoreState, StoreActions};
