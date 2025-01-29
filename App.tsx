@@ -35,6 +35,7 @@ import {DrumMachine, Soundfont} from 'smplr';
 import {ScaleModeSettings} from "./src/components/settings/ScaleModeSettings";
 import {Instrument, useStore} from "./src/model/UseStore";
 import type InstrumentSettings from "./src/model/InstrumentSettings";
+import trebleSettings from "./src/components/settings/TrebleSettings";
 
 const TempoMetronome = () => (
     <View style={styles.tempoMetronome}>
@@ -94,24 +95,6 @@ const App = () => {
     const allNotesArray = useMemo(() => generateAllNotesArray(), []);
 
     const percussionScale = Scale.defaultPercussionScale();
-    console.log("NOW CREATING:", treble, treble.settings.instrument);
-    const trebleInstrument = new Soundfont(context, {
-        instrument: treble.settings.instrument,
-        storage: storage,
-    });
-    trebleInstrument.output.addEffect('reverb', reverb, 0.1);
-    const bassInstrument = new Soundfont(context, {
-        instrument: bassSettings.instrument,
-        storage: storage,
-    });
-    const metronomeInstrument = new Soundfont(context, {
-        instrument: metronomeSettings.instrument,
-        storage: storage,
-    });
-    const percussionInstrument = new DrumMachine(context, {
-        instrument: percussionSettings.instrument,
-        storage: storage,
-    });
 
     // State Handlers
     const abortControllerRef = useRef(null);
@@ -222,13 +205,13 @@ const App = () => {
     }, [tonic, selectedScaleType, selectedMode, scaleRange]);
 
     const playScale = async () => {
-        trebleInstrument.stop();
-        bassInstrument.stop();
-        percussionInstrument.stop({});
-        metronomeInstrument.stop();
+        treble.settings.sound.stop({});
+        bassSettings.sound.stop({});
+        percussionSettings.sound.stop({});
+        metronomeSettings.sound.stop({});
         await playMelodies(
             [scale],
-            [trebleInstrument],
+            [treble.settings.sound],
             context,
             bpm,
             context.currentTime
@@ -239,7 +222,7 @@ const App = () => {
         handleStopAllPlayback();
         await playMelodies(
             [treble.melody, bassMelody, percussionMelody],
-            [trebleInstrument, bassInstrument, percussionInstrument],
+            [treble.settings.sound, bassSettings.sound, percussionSettings.sound],
             context,
             bpm,
             context.currentTime
@@ -266,10 +249,10 @@ const App = () => {
                 scale,
                 scale.generateBassScale(),
                 percussionScale,
-                trebleInstrument,
-                bassInstrument,
-                percussionInstrument,
-                metronomeInstrument,
+                treble.settings.sound,
+                bassSettings.sound,
+                percussionSettings.sound,
+                metronomeSettings.sound,
                 treble.settings,
                 bassSettings,
                 percussionSettings,
@@ -284,10 +267,10 @@ const App = () => {
     const handleStopAllPlayback = () => {
         setStopPlayback(true);
         // context.close();
-        trebleInstrument.stop();
-        bassInstrument.stop();
-        percussionInstrument.stop({});
-        metronomeInstrument.stop();
+        treble.settings.sound.stop({});
+        bassSettings.sound.stop({});
+        percussionSettings.sound.stop({});
+        metronomeSettings.sound.stop({});
         setIsPlayingContinuously(false);
         // Immediately abort the current playback
         if (abortControllerRef.current) {
@@ -490,7 +473,7 @@ const App = () => {
                     currentDisplayScale={scale.displayScale}
                     notes={allNotesArray}
                     context={context}
-                    trebleInstrument={trebleInstrument}
+                    trebleInstrument={treble.settings.sound}
                 />
                 <View style={styles.paddingRow}/>
             </View>

@@ -1,20 +1,28 @@
-import { create } from "zustand";
+import {create} from "zustand";
 import Scale from "./Scale";
-import InstrumentSettings from "./InstrumentSettings";
+import {
+    defaultBassInstrumentSettings,
+    defaultMetronomeInstrumentSettings,
+    defaultPercussionInstrumentSettings,
+    defaultTrebleInstrumentSettings,
+    InstrumentSettings, updateSound
+} from "./InstrumentSettings";
 import Melody from "./Melody";
-import { Dimensions } from "react-native";
-import { CacheStorage, Reverb } from "smplr";
+import {Dimensions} from "react-native";
+import {CacheStorage, Reverb} from "smplr";
 
-export const Instrument = {
-    Treble: "treble" as const,
-    Bass: "bass" as const,
-    Percussion: "percussion" as const,
-    Metronome: "metronome" as const,
-} as const;
+export enum Instrument {
+    Treble = "treble",
+    Bass = "bass",
+    Percussion = "percussion",
+    Metronome = "metronome",
+}
 
 type InstrumentType = typeof Instrument[keyof typeof Instrument];
 
 const context = new AudioContext();
+const reverb = new Reverb(context);
+const storage = new CacheStorage();
 
 interface StoreState {
     context: AudioContext;
@@ -94,19 +102,19 @@ export const useStore = create<StoreState & StoreActions>((set) => ({
     // Instrument Hierarchy
     instruments: {
         [Instrument.Treble]: {
-            settings: InstrumentSettings.defaultTrebleInstrumentSettings(),
+            settings: defaultTrebleInstrumentSettings(context, storage, reverb),
             melody: Melody.defaultTrebleMelody(),
         },
         [Instrument.Bass]: {
-            settings: InstrumentSettings.defaultBassInstrumentSettings(),
+            settings: defaultBassInstrumentSettings(context, storage, reverb),
             melody: Melody.defaultBassMelody(),
         },
         [Instrument.Percussion]: {
-            settings: InstrumentSettings.defaultPercussionInstrumentSettings(),
+            settings: defaultPercussionInstrumentSettings(context, storage, reverb),
             melody: Melody.defaultPercussionMelody(),
         },
         [Instrument.Metronome]: {
-            settings: InstrumentSettings.defaultMetronomeInstrumentSettings(),
+            settings: defaultMetronomeInstrumentSettings(context, storage, reverb),
             melody: Melody.defaultMetronomeMelody(),
         },
     },
@@ -115,30 +123,33 @@ export const useStore = create<StoreState & StoreActions>((set) => ({
     scale: Scale.defaultScale(),
 
     // Setters
-    setTonic: (newTonic) => set({ tonic: newTonic }),
-    setSelectedScaleType: (newScaleType) => set({ selectedScaleType: newScaleType }),
-    setSelectedMode: (newMode) => set({ selectedMode: newMode }),
-    setScaleRange: (newRange) => set({ scaleRange: newRange }),
-    setSelectedInterval: (newInterval) => set({ selectedInterval: newInterval }),
-    setScale: (newScale) => set({ scale: newScale }),
-    setBpm: (newBpm) => set({ bpm: newBpm }),
-    setTimeSignature: (newTimeSignature) => set({ timeSignature: newTimeSignature }),
-    setNumMeasures: (newNumMeasures) => set({ numMeasures: newNumMeasures }),
-    setIsPlayingContinuously: (newStatus) => set({ isPlayingContinuously: newStatus }),
-    setStopPlayback: (newStatus) => set({ stopPlayback: newStatus }),
-    setScreenWidth: (newWidth) => set({ screenWidth: newWidth }),
+    setTonic: (newTonic) => set({tonic: newTonic}),
+    setSelectedScaleType: (newScaleType) => set({selectedScaleType: newScaleType}),
+    setSelectedMode: (newMode) => set({selectedMode: newMode}),
+    setScaleRange: (newRange) => set({scaleRange: newRange}),
+    setSelectedInterval: (newInterval) => set({selectedInterval: newInterval}),
+    setScale: (newScale) => set({scale: newScale}),
+    setBpm: (newBpm) => set({bpm: newBpm}),
+    setTimeSignature: (newTimeSignature) => set({timeSignature: newTimeSignature}),
+    setNumMeasures: (newNumMeasures) => set({numMeasures: newNumMeasures}),
+    setIsPlayingContinuously: (newStatus) => set({isPlayingContinuously: newStatus}),
+    setStopPlayback: (newStatus) => set({stopPlayback: newStatus}),
+    setScreenWidth: (newWidth) => set({screenWidth: newWidth}),
 
     // Instrument Setters
     setInstrumentSettings: (instrument, newSettings) =>
-        set((state) => ({
-            instruments: {
-                ...state.instruments,
-                [instrument]: {
-                    ...state.instruments[instrument],
-                    settings: newSettings,
+        set((state) => {
+            updateSound(newSettings);
+            return {
+                instruments: {
+                    ...state.instruments,
+                    [instrument]: {
+                        ...state.instruments[instrument],
+                        settings: newSettings,
+                    },
                 },
-            },
-        })),
+            }
+        }),
 
     setInstrumentMelody: (instrument, newMelody) =>
         set((state) => ({
@@ -156,8 +167,8 @@ export const useStore = create<StoreState & StoreActions>((set) => ({
     isScaleTypeModalVisible: false,
     isModeModalVisible: false,
     isIntervalModalVisible: false,
-    setTonicModalVisible: (isVisible) => set({ isTonicModalVisible: isVisible }),
-    setScaleTypeModalVisible: (isVisible) => set({ isScaleTypeModalVisible: isVisible }),
-    setModeModalVisible: (isVisible) => set({ isModeModalVisible: isVisible }),
-    setIntervalModalVisible: (isVisible) => set({ isIntervalModalVisible: isVisible }),
+    setTonicModalVisible: (isVisible) => set({isTonicModalVisible: isVisible}),
+    setScaleTypeModalVisible: (isVisible) => set({isScaleTypeModalVisible: isVisible}),
+    setModeModalVisible: (isVisible) => set({isModeModalVisible: isVisible}),
+    setIntervalModalVisible: (isVisible) => set({isIntervalModalVisible: isVisible}),
 }));
