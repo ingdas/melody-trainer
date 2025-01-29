@@ -1,9 +1,9 @@
 // components/playContinuously.js
 
 import playMelodies from './playMelodies';
-import {generateMelody, Scale} from '../../model/MelodyGenerator';
+import {generateMelody} from '../../model/MelodyGenerator';
 import {Instrument, Instruments, InstrumentType} from "../../model/Instrument";
-import type Melody from "../../model/Melody";
+import {Melody} from "../../model/Melody";
 
 const playContinuously = async (
     instruments: Instruments,
@@ -13,9 +13,6 @@ const playContinuously = async (
     timeSignature: [number, number],
     numMeasures: number,
     context: AudioContext,
-    scale: Scale,
-    bassScale: Scale,
-    percussionScale: Scale,
 ) => {
 
     const timeFactor = 5 / bpm;
@@ -36,22 +33,19 @@ const playContinuously = async (
         console.log(`looping iteration ${iteration}`, abortControllerRef.current);
         if (iteration % 4 === 0) {
             newTrebleMelody = generateMelody({
-                scale,
                 numMeasures,
                 timeSignature,
-                instrumentSettings: instruments.treble.settings
+                instrumentState: instruments.treble
             })
             newBassMelody = generateMelody({
-                scale: bassScale,
                 numMeasures,
                 timeSignature,
-                instrumentSettings: instruments.bass.settings
+                instrumentState: instruments.bass
             })
             newPercussionMelody = generateMelody({
-                scale: percussionScale,
                 numMeasures,
                 timeSignature,
-                instrumentSettings: instruments.percussion.settings
+                instrumentState: instruments.percussion
             });
         }
 

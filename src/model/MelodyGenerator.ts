@@ -1,6 +1,7 @@
 import {Scale} from './Scale';
 import convertRankedArrayToMelody from "../operations/melodyGeneration/convertRankedArrayToMelody";
 import {fromFlattenedNotes, Melody} from "./Melody";
+import {InstrumentState} from "./Instrument";
 
 interface InstrumentSettings {
     notesPerMeasure: number;
@@ -12,10 +13,9 @@ interface InstrumentSettings {
 }
 
 interface MelodyGeneratorConfig {
-    scale: Scale;
     numMeasures: number;
     timeSignature: [number, number];
-    instrumentSettings: InstrumentSettings;
+    instrumentState: InstrumentState;
 }
 
 function getDivisors(timeSignature: [number, number], denom: number): number[] {
@@ -125,9 +125,7 @@ function createDisplayMelody(
 function generateMelody(config: MelodyGeneratorConfig): Melody {
     const {
         scale: {scale, displayScale, tonic},
-        numMeasures,
-        timeSignature,
-        instrumentSettings: {
+        settings: {
             notesPerMeasure,
             smallestNoteDenom,
             rhythmVariability,
@@ -135,7 +133,9 @@ function generateMelody(config: MelodyGeneratorConfig): Melody {
             randomizationRules,
             type
         }
-    } = config;
+    } = config.instrumentState;
+    const numMeasures = config.numMeasures;
+    const timeSignature = config.timeSignature;
 
     // Initialize melody array
     let melodyArray = Array(numMeasures).fill([]);

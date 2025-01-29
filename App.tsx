@@ -33,7 +33,7 @@ import {ScaleModeSettings} from "./src/components/settings/ScaleModeSettings";
 import {useStore} from "./src/model/UseStore";
 import {InstrumentSettings} from "./src/model/InstrumentSettings";
 
-import {Instrument} from "./src/model/Instrument";
+import {Instrument, InstrumentState} from "./src/model/Instrument";
 import {PercussionSettings} from "./src/components/settings/PercussionSettings";
 import {TempoMetronome} from "./src/components/TempoMetronome";
 import {createScale, defaultPercussionScale, generateBassScale, Scale} from "./src/model/Scale";
@@ -83,8 +83,6 @@ const App = () => {
 
     const allNotesArray = useMemo(() => generateAllNotesArray(), []);
 
-    const percussionScale = defaultPercussionScale();
-
     // State Handlers
     const abortControllerRef = useRef(null);
 
@@ -104,26 +102,13 @@ const App = () => {
     }, []);
 
     // melody
-    const setNewMelody = (instrumentSettings: InstrumentSettings) => {
-        let myScale: Scale = scale;
-        switch (instrumentSettings.type) {
-            case Instrument.Metronome:
-            case Instrument.Treble:
-                break;
-            case Instrument.Bass:
-                myScale = generateBassScale(scale);
-                break;
-            case Instrument.Percussion:
-                myScale = percussionScale;
-                break;
-        }
+    const setNewMelody = (instrumentState: InstrumentState) => {
         const newMelody = generateMelody({
-            scale: myScale,
             numMeasures,
             timeSignature,
-            instrumentSettings
+            instrumentState
         });
-        setInstrumentMelody(instrumentSettings.type, newMelody);
+        setInstrumentMelody(instrumentState.settings.type, newMelody);
     }
 
     // SCALE AND MODE HANDLING
@@ -223,9 +208,6 @@ const App = () => {
                 timeSignature,
                 numMeasures,
                 context,
-                scale,
-                generateBassScale(scale),
-                percussionScale,
             ).finally(() => setIsPlayingContinuously(false));
         }
     };
@@ -415,17 +397,17 @@ const App = () => {
                 <View style={styles.pickerRow}>
                     <TouchableOpacity
                         style={styles.pickerButton}
-                        onPress={() => setNewMelody(instruments.treble.settings)}>
+                        onPress={() => setNewMelody(instruments.treble)}>
                         <Text style={styles.pickerButtonText}> Randomize Melody </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.pickerButton}
-                        onPress={() => setNewMelody(instruments.bass.settings)}>
+                        onPress={() => setNewMelody(instruments.bass)}>
                         <Text style={styles.pickerButtonText}> Randomize Bass Line </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.pickerButton}
-                        onPress={() => setNewMelody(instruments.percussion.settings)}>
+                        onPress={() => setNewMelody(instruments.percussion)}>
                         <Text style={styles.pickerButtonText}> Randomize Percussion </Text>
                     </TouchableOpacity>
                 </View>

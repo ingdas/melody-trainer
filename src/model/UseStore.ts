@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import {defaultScale} from "./Scale";
+import {defaultPercussionScale, defaultScale, generateBassScale} from "./Scale";
 import {
     defaultBassInstrumentSettings,
     defaultMetronomeInstrumentSettings,
@@ -45,22 +45,25 @@ export const useStore = create<StoreState & StoreActions>((set) => ({
         [Instrument.Treble]: {
             settings: defaultTrebleInstrumentSettings(context, storage, reverb),
             melody: defaultTrebleMelody(),
+            scale: defaultScale()
         },
         [Instrument.Bass]: {
             settings: defaultBassInstrumentSettings(context, storage, reverb),
             melody: defaultBassMelody(),
+            scale: generateBassScale(defaultScale())
         },
         [Instrument.Percussion]: {
             settings: defaultPercussionInstrumentSettings(context, storage, reverb),
             melody: defaultPercussionMelody(),
+            scale: defaultPercussionScale()
         },
         [Instrument.Metronome]: {
             settings: defaultMetronomeInstrumentSettings(context, storage, reverb),
             melody: defaultMetronomeMelody(),
+            scale: defaultPercussionScale()
         },
     },
 
-    // Scale and Mode
     scale: defaultScale(),
 
     // Setters
@@ -69,7 +72,22 @@ export const useStore = create<StoreState & StoreActions>((set) => ({
     setSelectedMode: (newMode) => set({selectedMode: newMode}),
     setScaleRange: (newRange) => set({scaleRange: newRange}),
     setSelectedInterval: (newInterval) => set({selectedInterval: newInterval}),
-    setScale: (newScale) => set({scale: newScale}),
+    setScale: (newScale) =>
+        set((state) => ({
+            ...state,
+            scale: newScale,
+            instruments: {
+                ...state.instruments,  // Preserve all instruments
+                [Instrument.Treble]: {
+                    ...state.instruments[Instrument.Treble],
+                    scale: newScale,
+                },
+                [Instrument.Bass]: {
+                    ...state.instruments[Instrument.Bass],
+                    scale: generateBassScale(newScale),
+                },
+            }
+        })),
     setBpm: (newBpm) => set({bpm: newBpm}),
     setTimeSignature: (newTimeSignature) => set({timeSignature: newTimeSignature}),
     setNumMeasures: (newNumMeasures) => set({numMeasures: newNumMeasures}),
