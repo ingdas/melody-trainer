@@ -1,7 +1,7 @@
 import {Text, TouchableOpacity, View} from "react-native";
-import {colors, styles} from "../styles";
-import PickerModal from "../PickerModal";
-import PickerButton from "../PickerButton";
+import {colors, styles} from "../generic/styles";
+import PickerModal from "../generic/PickerModal";
+import PickerButton from "../generic/PickerButton";
 import {modes} from "../../operations/scaleHandler";
 
 const ScaleModeSettings = ({

@@ -2,8 +2,8 @@
 
 import React from 'react';
 import {Text, View} from 'react-native';
-import {colors, styles} from '../styles';
-import PickerButton from '../PickerButton';
+import {colors, styles} from '../generic/styles';
+import PickerButton from '../generic/PickerButton';
 
 const tempoTerms = [
     {bpm: 0, term: 'Larghissimo'},

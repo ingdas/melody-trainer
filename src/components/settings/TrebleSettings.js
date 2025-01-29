@@ -2,9 +2,9 @@
 
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {colors, styles} from '../styles';
-import PickerModal from '../PickerModal'; // Adjust the path if necessary
-import PickerButton from '../PickerButton';
+import {colors, styles} from '../generic/styles';
+import PickerModal from '../generic/PickerModal'; // Adjust the path if necessary
+import PickerButton from '../generic/PickerButton';
 
 const instrumentOptions = {
     'Acoustic Grand Piano': 'acoustic_grand_piano',

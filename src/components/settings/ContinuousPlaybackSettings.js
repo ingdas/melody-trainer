@@ -3,7 +3,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {EyeSlashFill, FileEarmarkMusicFill, Pause, PlayFill, Repeat, Shuffle} from 'react-bootstrap-icons';
-import {colors} from '../styles';
+import {colors} from '../generic/styles';
 
 const ToggleButton = ({active, onPress, activeIcon, passiveIcon, activeColor, iconSource, glyph}) => {
     return (

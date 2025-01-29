@@ -27,18 +27,18 @@ import {
   intervalNamesMap,
 } from './src/operations/scaleHandler'; // Import relevant functions
 import SheetMusic from './src/components/SheetMusic'; // Import the SheetMusic component
-import MeasureAndTempoSettings from './src/components/Settings/MeasureAndTempoSettings';
-import { ContinuousPlaybackSettings } from './src/components/Settings/ContinuousPlaybackSettings';
-import TrebleSettings from './src/components/Settings/TrebleSettings';
+import MeasureAndTempoSettings from './src/components/settings/MeasureAndTempoSettings';
+import { ContinuousPlaybackSettings } from './src/components/settings/ContinuousPlaybackSettings';
+import TrebleSettings from './src/components/settings/TrebleSettings';
 import {faGuitar, faPlay} from '@fortawesome/free-solid-svg-icons';
 
-import { styles, colors } from './src/components/styles';
+import { styles, colors } from './src/components/generic/styles';
 
 import playMelodies from './src/operations/playMelodies';
 import playContinuously from './src/operations/playContinuously';
 
 import { Reverb, Soundfont, DrumMachine, CacheStorage } from 'smplr';
-import {ScaleModeSettings} from "./src/components/Settings/ScaleModeSettings";
+import {ScaleModeSettings} from "./src/components/settings/ScaleModeSettings";
 
 const context = new AudioContext();
 const reverb = new Reverb(context);
