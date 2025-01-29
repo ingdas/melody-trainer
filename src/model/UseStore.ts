@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import Scale from "./Scale";
+import {defaultScale} from "./Scale";
 import {
     defaultBassInstrumentSettings,
     defaultMetronomeInstrumentSettings,
@@ -10,7 +10,7 @@ import {
 import Melody from "./Melody";
 import {Dimensions} from "react-native";
 import {CacheStorage, Reverb} from "smplr";
-import {StoreState, StoreActions} from './types';
+import {StoreActions, StoreState} from './UseStoreTypes';
 import {Instrument} from "./Instrument";
 
 const context = new AudioContext();
@@ -56,7 +56,7 @@ export const useStore = create<StoreState & StoreActions>((set) => ({
     },
 
     // Scale and Mode
-    scale: Scale.defaultScale(),
+    scale: defaultScale(),
 
     // Setters
     setTonic: (newTonic) => set({tonic: newTonic}),

@@ -7,7 +7,6 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 import Melody from './src/model/Melody';
 import MelodyGenerator from './src/model/MelodyGenerator';
-import Scale from './src/model/Scale';
 
 import {useFonts} from 'expo-font';
 import generateAllNotesArray from './src/operations/allNotesArray';
@@ -36,12 +35,9 @@ import {useStore} from "./src/model/UseStore";
 import {InstrumentSettings} from "./src/model/InstrumentSettings";
 
 import {Instrument} from "./src/model/Instrument";
-
-const TempoMetronome = () => (
-    <View style={styles.tempoMetronome}>
-        <Text style={styles.text}>Tempo & Metronome</Text>
-    </View>
-);
+import {PercussionSettings} from "./src/components/settings/PercussionSettings";
+import {TempoMetronome} from "./src/components/TempoMetronome";
+import {createScale, defaultPercussionScale, generateBassScale, Scale} from "./src/model/Scale";
 
 
 const App = () => {
@@ -87,7 +83,7 @@ const App = () => {
 
     const allNotesArray = useMemo(() => generateAllNotesArray(), []);
 
-    const percussionScale = Scale.defaultPercussionScale();
+    const percussionScale = defaultPercussionScale();
 
     // State Handlers
     const abortControllerRef = useRef(null);
@@ -112,7 +108,7 @@ const App = () => {
             case Instrument.Treble:
                 break;
             case Instrument.Bass:
-                myScale = scale.generateBassScale();
+                myScale = generateBassScale(scale);
                 break;
             case Instrument.Percussion:
                 myScale = percussionScale;
@@ -182,7 +178,7 @@ const App = () => {
                     selectedMode,
                     scaleRange
                 );
-                setScale(new Scale(scale, displayScale, numAccidentals));
+                setScale(createScale(scale, displayScale, numAccidentals));
             } catch (error) {
                 console.error('Error updating current scale', error);
             }
@@ -223,29 +219,16 @@ const App = () => {
             setIsPlayingContinuously(true);
             abortControllerRef.current = new AbortController(); // Initialize AbortController
             playContinuously(
+                instruments,
+                setInstrumentMelody,
                 abortControllerRef,
                 bpm,
                 timeSignature,
                 numMeasures,
                 context,
-                instruments.treble.melody,
-                instruments.bass.melody,
-                instruments.percussion.melody,
-                instruments.metronome.melody,
                 scale,
-                scale.generateBassScale(),
+                generateBassScale(scale),
                 percussionScale,
-                instruments.treble.settings.sound,
-                instruments.bass.settings.sound,
-                instruments.percussion.settings.sound,
-                instruments.metronome.settings.sound,
-                instruments.treble.settings,
-                instruments.bass.settings,
-                instruments.percussion.settings,
-                instruments.metronome.settings,
-                (x: Melody) => setInstrumentMelody(Instrument.Treble, x),
-                (x: Melody) => setInstrumentMelody(Instrument.Bass, x),
-                (x: Melody) => setInstrumentMelody(Instrument.Percussion, x)
             ).finally(() => setIsPlayingContinuously(false));
         }
     };
@@ -576,26 +559,5 @@ const App = () => {
         </View>
     );
 };
-const PercussionSettings = () => (
-    <View style={[styles.settings, {backgroundColor: colors.percussionActive}]}>
-        <Text style={styles.tabTitle}>Percussion</Text>
-        <View style={styles.pickerRow}>
-            <Text style={styles.label}>Metronome</Text>
-        </View>
-        <View style={styles.pickerRow}>
-            <Text style={styles.label}>Cymbals</Text>
-        </View>
-        <View style={styles.pickerRow}>
-            <Text style={styles.label}>Bass and Snare</Text>
-        </View>
-        <View style={styles.pickerRow}>
-            <Text style={styles.label}>Fills</Text>
-        </View>
-        <View style={styles.pickerRow}>
-            <Text style={styles.label}>Rhythm Variability</Text>
-        </View>
-        <View style={styles.paddingRow}/>
-    </View>
-);
 
 export default App;

@@ -1,8 +1,8 @@
 import {CacheStorage, Reverb} from "smplr";
 import Melody from "./Melody";
-import Scale from "./Scale";
 import {InstrumentSettings} from "./InstrumentSettings";
 import {Instruments, InstrumentType} from "./Instrument";
+import {Scale} from "./Scale";
 
 interface StoreState {
     context: AudioContext;

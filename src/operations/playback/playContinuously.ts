@@ -2,31 +2,19 @@
 
 import playMelodies from './playMelodies';
 import MelodyGenerator from '../../model/MelodyGenerator';
+import {Instrument, Instruments} from "../../model/Instrument";
 
 const playContinuously = async (
+    instruments: Instruments,
+    setInstrumentMelody,
     abortControllerRef,
     bpm,
     timeSignature,
     numMeasures,
     context,
-    trebleMelody,
-    bassMelody,
-    percussionMelody,
-    metronomeMelody,
     scale,
     bassScale,
     percussionScale,
-    trebleInstrument,
-    bassInstrument,
-    percussionInstrument,
-    metronomeInstrument,
-    trebleInstrumentSettings,
-    bassInstrumentSettings,
-    percussionInstrumentSettings,
-    metronomeInstrumentSettings,
-    setTrebleMelody,
-    setBassMelody,
-    setPercussionMelody
 ) => {
 
     const timeFactor = 5 / bpm;
@@ -36,9 +24,9 @@ const playContinuously = async (
     let startTime = context.currentTime;
     let iteration = 0;
 
-    let oldTrebleMelody = trebleMelody;
-    let oldBassMelody = bassMelody;
-    let oldPercussionMelody = percussionMelody;
+    let oldTrebleMelody = instruments.treble.melody;
+    let oldBassMelody = instruments.bass.melody;
+    let oldPercussionMelody = instruments.percussion.melody;
     let newTrebleMelody = oldTrebleMelody;
     let newBassMelody = oldBassMelody;
     let newPercussionMelody = oldPercussionMelody;
@@ -50,34 +38,34 @@ const playContinuously = async (
                 scale,
                 numMeasures,
                 timeSignature,
-                trebleInstrumentSettings
+                instruments.treble.settings
             ).generateMelody();
             newBassMelody = new MelodyGenerator(
                 bassScale,
                 numMeasures,
                 timeSignature,
-                bassInstrumentSettings
+                instruments.bass.settings
             ).generateMelody();
             newPercussionMelody = new MelodyGenerator(
                 percussionScale,
                 numMeasures,
                 timeSignature,
-                percussionInstrumentSettings
+                instruments.percussion.settings
             ).generateMelody();
         }
 
         if (iteration % 2 === 0) {
             await playMelodies(
                 [newTrebleMelody, newBassMelody, newPercussionMelody],
-                [trebleInstrument, bassInstrument, percussionInstrument],
+                [instruments.treble.settings.sound, instruments.bass.settings.sound, instruments.percussion.settings.sound],
                 context,
                 bpm,
                 startTime
             );
         } else {
             await playMelodies(
-                [metronomeMelody],
-                [metronomeInstrument],
+                [instruments.metronome.melody],
+                [instruments.metronome.settings.sound],
                 context,
                 bpm,
                 startTime
@@ -98,9 +86,9 @@ const playContinuously = async (
             break;
         }
 
-        setTrebleMelody(newTrebleMelody);
-        setBassMelody(newBassMelody);
-        setPercussionMelody(newPercussionMelody);
+        setInstrumentMelody(Instrument.Treble, newTrebleMelody);
+        setInstrumentMelody(Instrument.Bass, newBassMelody);
+        setInstrumentMelody(Instrument.Percussion, newPercussionMelody);
         oldBassMelody = newBassMelody;
         oldTrebleMelody = newTrebleMelody;
         oldPercussionMelody = newPercussionMelody;
@@ -124,10 +112,10 @@ const playContinuously = async (
         iteration++;
     }
     // stop all playback if broken.
-    trebleInstrument.stop();
-    bassInstrument.stop();
-    percussionInstrument.stop();
-    metronomeInstrument.stop();
+    instruments.treble.settings.sound.stop({});
+    instruments.bass.settings.sound.stop({});
+    instruments.percussion.settings.sound.stop({});
+    instruments.metronome.settings.sound.stop({});
 };
 
 export default playContinuously;
