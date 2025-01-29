@@ -195,8 +195,6 @@ const modeAdjustments = {
     Locrian: -5,
 };
 
-const scaleTypes = Object.keys(modes);
-
 const intervalNamesMap = {
     Unison: 0,
     '2nd': 2,
@@ -343,9 +341,7 @@ const randomMode = (selectedScaleType, modes, setSelectedMode) => {
 };
 
 const randomTonic = () => {
-    const newTonic =
-        tonicOptions[Math.floor(Math.random() * tonicOptions.length)];
-    return newTonic;
+    return tonicOptions[Math.floor(Math.random() * tonicOptions.length)];
 };
 
 export {

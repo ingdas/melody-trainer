@@ -1,6 +1,5 @@
 function convertRankedArrayToMelody(rankedArray, tonic, scale, notesPerMeasure, numMeasures, randomizationRules) {
     const generatedMelody = rankedArray;
-    const melodyNotes = [];
     const melodyLength = notesPerMeasure * numMeasures;
     const numberOfSlotsPerMeasure = rankedArray.length / numMeasures;
     let melodyIndex = 0;
@@ -17,7 +16,6 @@ function convertRankedArrayToMelody(rankedArray, tonic, scale, notesPerMeasure, 
                     index = Math.floor(Math.random() * scale.length);
                     generatedMelody[i] = scale[index];
                 }
-                melodyNotes.push(scale[index]);
                 melodyIndex++;
                 if (melodyIndex >= melodyLength) {
                     break; // Stop if melody length is reached

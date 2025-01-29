@@ -4,13 +4,10 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import {
   Text,
   View,
-  Button,
-  Modal,
-  FlatList,
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { SceneMap, TabBar } from 'react-native-tab-view';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Melody from './src/model/Melody';
@@ -36,7 +33,6 @@ import TrebleSettings from './src/components/Settings/TrebleSettings';
 import {faGuitar, faPlay} from '@fortawesome/free-solid-svg-icons';
 
 import { styles, colors } from './src/components/styles';
-import PickerButton from './src/components/PickerButton';
 
 import playMelodies from './src/operations/playMelodies';
 import playContinuously from './src/operations/playContinuously';
@@ -55,15 +51,15 @@ const TempoMetronome = () => (
 );
 
 const App = () => {
-  const [fontsLoaded] = useFonts({
+  useFonts({
     Maestro: require('./assets/fonts/maestro.ttf'),
   });
+
   const allNotesArray = useMemo(() => generateAllNotesArray(), []);
 
   const [tonic, setTonic] = useState('C4'); // Default to C
   const [selectedScaleType, setSelectedScaleType] = useState('Diatonic'); // Default to Diatonic
   const [selectedMode, setSelectedMode] = useState('I. Ionian (Major)'); // Default to Ionian (Major)
-  const [notesPerMeasure, setNotesPerMeasure] = useState(3); // Default melody length
   const [scaleRange, setScaleRange] = useState(12); // Default melody range (one octave)
   const [selectedInterval, setSelectedInterval] = useState('Octave');
 
@@ -244,23 +240,23 @@ const App = () => {
     bassInstrument.stop();
     percussionInstrument.stop();
     metronomeInstrument.stop();
-    playMelodies(
-      [scale],
-      [trebleInstrument],
-      context,
-      bpm,
-      context.currentTime
+    await playMelodies(
+        [scale],
+        [trebleInstrument],
+        context,
+        bpm,
+        context.currentTime
     );
   };
 
   const playAllMelodies = async () => {
     handleStopAllPlayback();
-    playMelodies(
-      [trebleMelody, bassMelody, percussionMelody],
-      [trebleInstrument, bassInstrument, percussionInstrument],
-      context,
-      bpm,
-      context.currentTime
+    await playMelodies(
+        [trebleMelody, bassMelody, percussionMelody],
+        [trebleInstrument, bassInstrument, percussionInstrument],
+        context,
+        bpm,
+        context.currentTime
     );
   };
 

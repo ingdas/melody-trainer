@@ -8,13 +8,13 @@ class InstrumentSettings {
         enableTriplets,
         randomizationRules
     ) {
-        (this.instrument = instrument),
-            (this.type = type),
-            (this.notesPerMeasure = notesPerMeasure),
-            (this.smallestNoteDenom = smallestNoteDenom),
-            (this.rhythmVariability = rhythmVariability),
-            (this.enableTriplets = enableTriplets),
-            (this.randomizationRules = randomizationRules);
+        this.instrument = instrument;
+        this.type = type;
+        this.notesPerMeasure = notesPerMeasure;
+        this.smallestNoteDenom = smallestNoteDenom;
+        this.rhythmVariability = rhythmVariability;
+        this.enableTriplets = enableTriplets;
+        this.randomizationRules = randomizationRules;
     }
 
     static defaultTrebleInstrumentSettings() {

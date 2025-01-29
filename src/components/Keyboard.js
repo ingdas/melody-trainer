@@ -71,7 +71,8 @@ const Keyboard = ({scaleRange, anyTonic, currentScale, currentDisplayScale, note
                                 isInCurrentScale && styles.highlightedWhiteKey,
                             ]}
                             onPress={() => {
-                                console.log(note, 'was pressed'), playSound(note, trebleInstrument, context)
+                                console.log(note, 'was pressed');
+                                playSound(note, trebleInstrument, context);
                             }}
                         >
                             <Text style={styles.whiteKeyText}>{noteDisplayName(note, anyTonic)}</Text>
@@ -100,7 +101,8 @@ const Keyboard = ({scaleRange, anyTonic, currentScale, currentDisplayScale, note
                                 isInCurrentScale && styles.highlightedBlackKey,
                             ]}
                             onPress={() => {
-                                console.log(note, 'was pressed'), playSound(note, trebleInstrument, context)
+                                console.log(note, 'was pressed');
+                                playSound(note, trebleInstrument, context);
                             }}
                         >
                             <Text style={styles.blackKeyText}>{noteDisplayName(note, anyTonic)}</Text>

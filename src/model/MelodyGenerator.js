@@ -2,7 +2,7 @@ import Melody from './Melody.js';
 import convertRankedArrayToMelody from '../operations/convertRankedArrayToMelody.js';
 
 class MelodyGenerator {
-    constructor(Scale, numMeasures, timeSignature: number[], InstrumentSettings) {
+    constructor(Scale, numMeasures, timeSignature, InstrumentSettings) {
         this.scale = Scale.scale;
         this.displayScale = Scale.displayScale;
         this.numAccidentals = Scale.numAccidentals;
@@ -163,10 +163,10 @@ class MelodyGenerator {
                 }
                 if (tripletHasPriority) {
                     // Step 4: Fill in the triplet values
-                    tripletsArray[randomIndex * 1] = tripletsArray[randomIndex];
-                    tripletsArray[randomIndex * 1 + 2] = tripletsArray[randomIndex];
-                    tripletsArray[randomIndex * 1 + 3] = null;
-                    tripletsArray[randomIndex * 1 + 4] = tripletsArray[randomIndex];
+                    tripletsArray[randomIndex] = tripletsArray[randomIndex];
+                    tripletsArray[randomIndex + 2] = tripletsArray[randomIndex];
+                    tripletsArray[randomIndex + 3] = null;
+                    tripletsArray[randomIndex + 4] = tripletsArray[randomIndex];
 
                     console.log('Triplet inserted:', tripletsArray);
                 }
@@ -231,15 +231,13 @@ class MelodyGenerator {
             const numBeatSlots =
                 (numMeasureSlots / timeSignature[0]) * (timeSignature[1] / 4);
 
-            const generatedMelodyWithRests = melodyArray.map((note, index) => {
+            return melodyArray.map((note, index) => {
                 const isBeat = (index % numMeasureSlots) % numBeatSlots === 0;
                 if (isBeat && note === null) {
                     return 'r';
                 }
                 return note;
             });
-
-            return generatedMelodyWithRests;
         };
 
         let generatedMelodyWithRests;

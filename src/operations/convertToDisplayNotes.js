@@ -34,9 +34,7 @@ const standardizeTonic = (anyTonic) => {
     };
 
     const parsedTonic = anyTonic.replace(/[0-9]/g, '');
-    const tonic = mapEnharmonicEquivalent(parsedTonic) + anyTonic.match(/[0-9]+/);
-
-    return tonic;
+    return mapEnharmonicEquivalent(parsedTonic) + anyTonic.match(/[0-9]+/);
 };
 
 const getRelativeNoteName = (note, anyTonic) => {

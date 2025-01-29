@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text as RNText, TouchableOpacity} from 'react-native';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const ToggleButton = ({active, onPress, activeIcon, inactiveIcon, activeColor, iconSource, glyph}) => {
     return (
@@ -7,7 +8,7 @@ const ToggleButton = ({active, onPress, activeIcon, inactiveIcon, activeColor, i
             {iconSource === 'bootstrap' ? (
                 <FontAwesomeIcon
                     icon={active ? activeIcon : inactiveIcon}
-                    size={18}
+                    size={"1x"}
                     color={active ? activeColor : '#666'}
                     style={styles.pickerButtonIcon}
                 />

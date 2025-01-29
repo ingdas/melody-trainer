@@ -19,7 +19,7 @@ const playMelodies = async (
             const note = notes[i];
             const startTime = scheduledStart + timeStamps[i] * timeFactor;
             const duration = durations[i] * timeFactor;
-            playSound(note, instrument, context, startTime, duration);
+            await playSound(note, instrument, context, startTime, duration);
         }
     }
 

@@ -39,8 +39,7 @@ const calculateAllTimeStamps = (timeSignature, noteGroupSize, ...timeStampsArray
     finalTimeStamps.push('q');
     finalTimeStamps.push('m');
 
-    const allTimeStamps = finalTimeStamps;
-    return allTimeStamps;
+    return finalTimeStamps;
 };
 
 export default calculateAllTimeStamps;

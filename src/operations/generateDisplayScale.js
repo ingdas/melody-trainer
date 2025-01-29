@@ -33,10 +33,9 @@ const computeScaleDelta = (intervals) => {
         return acc;
     }, []);
 
-    const scaleDelta = [0].concat(
+    return [0].concat(
         intervalsSum.map((sum, index) => sum - majorSum[index])
     );
-    return scaleDelta;
 };
 
 const simplifications = {
@@ -89,8 +88,7 @@ const generateDisplayScale = (tonic, intervals, scaleRange) => {
         });
     } else {
         const standardScale = generateScale(tonic, intervals, scaleRange);
-        const displayScale = standardScale.map(note => getRelativeNoteName(note, tonic));
-        return displayScale;
+        return standardScale.map(note => getRelativeNoteName(note, tonic));
     }
 };
 

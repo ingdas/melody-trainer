@@ -67,7 +67,7 @@ const playContinuously = async (
         }
 
         if (iteration % 2 === 0) {
-            playMelodies(
+            await playMelodies(
                 [newTrebleMelody, newBassMelody, newPercussionMelody],
                 [trebleInstrument, bassInstrument, percussionInstrument],
                 context,
@@ -75,7 +75,7 @@ const playContinuously = async (
                 startTime
             );
         } else {
-            playMelodies(
+            await playMelodies(
                 [metronomeMelody],
                 [metronomeInstrument],
                 context,
