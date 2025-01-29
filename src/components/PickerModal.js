@@ -1,14 +1,7 @@
 //components/PickerModel.js
-import {
-    Text,
-    View,
-    TouchableOpacity,
-    FlatList,
-    Modal,
-    Button
-} from 'react-native';
+import {Button, FlatList, Modal, Text, TouchableOpacity, View} from 'react-native';
 
-import {styles, colors} from './styles'
+import {styles} from './styles'
 // PICKER MODALS
 const PickerModal = (
     data,

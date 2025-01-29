@@ -1,7 +1,7 @@
 // PianoView.js
 
-import React, {useMemo} from 'react';
-import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
+import React from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {getRelativeNoteName, standardizeTonic} from '../operations/convertToDisplayNotes';
 import playSound from '../operations/playSound'
 
