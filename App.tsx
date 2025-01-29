@@ -97,7 +97,10 @@ const App = () => {
         const handleResize = () => {
             setScreenWidth(Dimensions.get('window').width);
         };
-        Dimensions.addEventListener('change', handleResize);
+        const subscription = Dimensions.addEventListener('change', handleResize);
+        return () => {
+            subscription.remove();
+        };
     }, []);
 
     // melody
