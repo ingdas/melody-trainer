@@ -4,12 +4,12 @@ import React from 'react';
 import {View} from 'react-native';
 import {Path, Svg, Text as SvgText} from 'react-native-svg';
 import {useFonts} from 'expo-font';
-import {processMelodyAndCalculateSlots} from '../operations/processMelodyAndCalculateSlots';
-import {processMelodyAndCalculateFlags} from '../operations/processMelodyAndCalculateFlags';
+import {processMelodyAndCalculateSlots} from '../operations/rendering/processMelodyAndCalculateSlots';
+import {processMelodyAndCalculateFlags} from '../operations/rendering/processMelodyAndCalculateFlags';
 
-import {renderMelodyNotes} from '../operations/renderMelodyNotes';
-import renderAccidentals from '../operations/renderAccidentals';
-import calculateAllTimeStamps from '../operations/calculateAllTimeStamps';
+import {renderMelodyNotes} from '../operations/rendering/renderMelodyNotes';
+import renderAccidentals from '../operations/rendering/renderAccidentals';
+import calculateAllTimeStamps from '../operations/melodyGeneration/calculateAllTimeStamps';
 
 const SheetMusic = ({
                         timeSignature,

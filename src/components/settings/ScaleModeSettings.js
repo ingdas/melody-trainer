@@ -2,7 +2,7 @@ import {Text, TouchableOpacity, View} from "react-native";
 import {colors, styles} from "../generic/styles";
 import PickerModal from "../generic/PickerModal";
 import PickerButton from "../generic/PickerButton";
-import {modes} from "../../operations/scaleHandler";
+import {modes} from "../../operations/scale/scaleHandler";
 
 const ScaleModeSettings = ({
                                currentDisplayScale,

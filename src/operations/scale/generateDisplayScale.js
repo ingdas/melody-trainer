@@ -1,5 +1,5 @@
-import {getRelativeNoteName, standardizeTonic} from './convertToDisplayNotes'
-import generateAllNotesArray from './allNotesArray';
+import {getRelativeNoteName, standardizeTonic} from '../rendering/convertToDisplayNotes'
+import generateAllNotesArray from '../allNotesArray';
 
 const notes = generateAllNotesArray();
 

@@ -1,5 +1,5 @@
 import Melody from './Melody.js';
-import convertRankedArrayToMelody from '../operations/convertRankedArrayToMelody.js';
+import convertRankedArrayToMelody from '../operations/melodyGeneration/convertRankedArrayToMelody.js';
 
 class MelodyGenerator {
     constructor(Scale, numMeasures, timeSignature, InstrumentSettings) {

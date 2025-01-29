@@ -1,4 +1,4 @@
-import generateAllNotesArray from './allNotesArray';
+import generateAllNotesArray from '../allNotesArray';
 
 const allNotesArray = generateAllNotesArray();
 

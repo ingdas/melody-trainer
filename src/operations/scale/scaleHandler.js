@@ -1,7 +1,7 @@
 // components/scaleHandler.js
 import generateDisplayScale from './generateDisplayScale';
-import {standardizeTonic} from './convertToDisplayNotes';
-import generateAllNotesArray from './allNotesArray';
+import {standardizeTonic} from '../rendering/convertToDisplayNotes';
+import generateAllNotesArray from '../allNotesArray';
 
 const notes = generateAllNotesArray();
 

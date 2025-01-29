@@ -25,7 +25,7 @@ import {
   tonicOptions,
   intervalNames,
   intervalNamesMap,
-} from './src/operations/scaleHandler'; // Import relevant functions
+} from './src/operations/scale/scaleHandler'; // Import relevant functions
 import SheetMusic from './src/components/SheetMusic'; // Import the SheetMusic component
 import MeasureAndTempoSettings from './src/components/settings/MeasureAndTempoSettings';
 import { ContinuousPlaybackSettings } from './src/components/settings/ContinuousPlaybackSettings';
@@ -34,8 +34,8 @@ import {faGuitar, faPlay} from '@fortawesome/free-solid-svg-icons';
 
 import { styles, colors } from './src/components/generic/styles';
 
-import playMelodies from './src/operations/playMelodies';
-import playContinuously from './src/operations/playContinuously';
+import playMelodies from './src/operations/playback/playMelodies';
+import playContinuously from './src/operations/playback/playContinuously';
 
 import { Reverb, Soundfont, DrumMachine, CacheStorage } from 'smplr';
 import {ScaleModeSettings} from "./src/components/settings/ScaleModeSettings";

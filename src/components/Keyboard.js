@@ -2,8 +2,8 @@
 
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {getRelativeNoteName, standardizeTonic} from '../operations/convertToDisplayNotes';
-import playSound from '../operations/playSound'
+import {getRelativeNoteName, standardizeTonic} from '../operations/rendering/convertToDisplayNotes';
+import playSound from '../operations/playback/playSound'
 
 const Keyboard = ({scaleRange, anyTonic, currentScale, currentDisplayScale, notes, context, trebleInstrument}) => {
     const tonic = standardizeTonic(anyTonic);

@@ -1,7 +1,7 @@
 // components/playContinuously.js
 
 import playMelodies from './playMelodies';
-import MelodyGenerator from '../model/MelodyGenerator';
+import MelodyGenerator from '../../model/MelodyGenerator';
 
 const playContinuously = async (
     abortControllerRef,
