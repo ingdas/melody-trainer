@@ -34,6 +34,7 @@ import playContinuously from './src/operations/playback/playContinuously';
 import {DrumMachine, Soundfont} from 'smplr';
 import {ScaleModeSettings} from "./src/components/settings/ScaleModeSettings";
 import {Instrument, useStore} from "./src/model/UseStore";
+import type InstrumentSettings from "./src/model/InstrumentSettings";
 
 const TempoMetronome = () => (
     <View style={styles.tempoMetronome}>
@@ -86,9 +87,9 @@ const App = () => {
     } = useStore();
 
     const treble = instruments[Instrument.Treble];
-    const { settings: bassSettings, melody: bassMelody } = instruments[Instrument.Bass];
-    const { settings: percussionSettings, melody: percussionMelody } = instruments[Instrument.Percussion];
-    const { settings: metronomeSettings, melody: metronomeMelody } = instruments[Instrument.Metronome];
+    const {settings: bassSettings, melody: bassMelody} = instruments[Instrument.Bass];
+    const {settings: percussionSettings, melody: percussionMelody} = instruments[Instrument.Percussion];
+    const {settings: metronomeSettings, melody: metronomeMelody} = instruments[Instrument.Metronome];
 
     const allNotesArray = useMemo(() => generateAllNotesArray(), []);
 
@@ -103,12 +104,12 @@ const App = () => {
         instrument: bassSettings.instrument,
         storage: storage,
     });
-    const percussionInstrument = new DrumMachine(context, {
-        instrument: percussionSettings.instrument,
-        storage: storage,
-    });
     const metronomeInstrument = new Soundfont(context, {
         instrument: metronomeSettings.instrument,
+        storage: storage,
+    });
+    const percussionInstrument = new DrumMachine(context, {
+        instrument: percussionSettings.instrument,
         storage: storage,
     });
 
@@ -124,12 +125,7 @@ const App = () => {
         const handleResize = () => {
             setScreenWidth(Dimensions.get('window').width);
         };
-
         Dimensions.addEventListener('change', handleResize);
-
-        return () => {
-            Dimensions.removeEventListener('change', handleResize);
-        };
     }, []);
 
     // melody
@@ -210,6 +206,7 @@ const App = () => {
     useEffect(() => {
         const updateCurrentScale = (tonic, selectedMode) => {
             try {
+                // @ts-ignore
                 const {scale, displayScale, numAccidentals} = generateSelectedScale(
                     tonic,
                     selectedScaleType,
@@ -227,7 +224,7 @@ const App = () => {
     const playScale = async () => {
         trebleInstrument.stop();
         bassInstrument.stop();
-        percussionInstrument.stop();
+        percussionInstrument.stop({});
         metronomeInstrument.stop();
         await playMelodies(
             [scale],
@@ -277,9 +274,9 @@ const App = () => {
                 bassSettings,
                 percussionSettings,
                 metronomeSettings,
-                (x) => setInstrumentMelody(Instrument.Treble, x),
-                (x) => setInstrumentMelody(Instrument.Bass, x),
-                (x) => setInstrumentMelody(Instrument.Percussion, x)
+                (x: Melody) => setInstrumentMelody(Instrument.Treble, x),
+                (x: Melody) => setInstrumentMelody(Instrument.Bass, x),
+                (x: Melody) => setInstrumentMelody(Instrument.Percussion, x)
             ).finally(() => setIsPlayingContinuously(false));
         }
     };
@@ -289,7 +286,7 @@ const App = () => {
         // context.close();
         trebleInstrument.stop();
         bassInstrument.stop();
-        percussionInstrument.stop();
+        percussionInstrument.stop({});
         metronomeInstrument.stop();
         setIsPlayingContinuously(false);
         // Immediately abort the current playback
@@ -598,7 +595,7 @@ const App = () => {
                 <View style={styles.settingsTab}>
                     <TrebleSettings
                         trebleInstrumentSettings={treble.settings}
-                        setTrebleInstrumentSettings={(newSettings) => setInstrumentSettings(Instrument.Treble, newSettings)}
+                        setTrebleInstrumentSettings={(newSettings : InstrumentSettings) => setInstrumentSettings(Instrument.Treble, newSettings)}
                     />
                 </View>
             )}

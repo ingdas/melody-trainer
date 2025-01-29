@@ -29,7 +29,9 @@
     "react-native-vector-icons": "*",
     "react-native-web": "~0.19.10",
     "smplr": "*",
-    "zustand": "^5.0.3"
+    "zustand": "^5.0.3",
+    "typescript": "~5.3.3",
+    "@types/react": "~18.2.79"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

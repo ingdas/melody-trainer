@@ -1,4 +1,4 @@
-import { create } from "zustand/index";
+import { create } from "zustand";
 import Scale from "./Scale";
 import InstrumentSettings from "./InstrumentSettings";
 import Melody from "./Melody";
@@ -6,15 +6,74 @@ import { Dimensions } from "react-native";
 import { CacheStorage, Reverb } from "smplr";
 
 export const Instrument = {
-    Treble: "treble",
-    Bass: "bass",
-    Percussion: "percussion",
-    Metronome: "metronome",
-};
+    Treble: "treble" as const,
+    Bass: "bass" as const,
+    Percussion: "percussion" as const,
+    Metronome: "metronome" as const,
+} as const;
+
+type InstrumentType = typeof Instrument[keyof typeof Instrument];
 
 const context = new AudioContext();
 
-export const useStore = create((set) => ({
+interface StoreState {
+    context: AudioContext;
+    reverb: Reverb;
+    storage: CacheStorage;
+
+    // Global Settings
+    tonic: string;
+    selectedScaleType: string;
+    selectedMode: string;
+    scaleRange: number;
+    selectedInterval: string;
+    bpm: number;
+    timeSignature: [number, number];
+    numMeasures: number;
+    isPlayingContinuously: boolean;
+    stopPlayback: boolean;
+    screenWidth: number;
+
+    // Instrument Hierarchy
+    instruments: {
+        [key in InstrumentType]: {
+            settings: InstrumentSettings;
+            melody: Melody;
+        };
+    };
+
+    // Scale and Mode
+    scale: Scale;
+
+    // Modal Visibility
+    isTonicModalVisible: boolean;
+    isScaleTypeModalVisible: boolean;
+    isModeModalVisible: boolean;
+    isIntervalModalVisible: boolean;
+}
+
+interface StoreActions {
+    setTonic: (newTonic: string) => void;
+    setSelectedScaleType: (newScaleType: string) => void;
+    setSelectedMode: (newMode: string) => void;
+    setScaleRange: (newRange: number) => void;
+    setSelectedInterval: (newInterval: string) => void;
+    setScale: (newScale: Scale) => void;
+    setBpm: (newBpm: number) => void;
+    setTimeSignature: (newTimeSignature: [number, number]) => void;
+    setNumMeasures: (newNumMeasures: number) => void;
+    setIsPlayingContinuously: (newStatus: boolean) => void;
+    setStopPlayback: (newStatus: boolean) => void;
+    setScreenWidth: (newWidth: number) => void;
+    setInstrumentSettings: (instrument: InstrumentType, newSettings: InstrumentSettings) => void;
+    setInstrumentMelody: (instrument: InstrumentType, newMelody: Melody) => void;
+    setTonicModalVisible: (isVisible: boolean) => void;
+    setScaleTypeModalVisible: (isVisible: boolean) => void;
+    setModeModalVisible: (isVisible: boolean) => void;
+    setIntervalModalVisible: (isVisible: boolean) => void;
+}
+
+export const useStore = create<StoreState & StoreActions>((set) => ({
     context: context,
     reverb: new Reverb(context),
     storage: new CacheStorage(),

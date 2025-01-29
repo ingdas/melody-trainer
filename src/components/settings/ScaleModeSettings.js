@@ -27,7 +27,6 @@ const ScaleModeSettings = ({
                                handleRandomizeMode,
 
                                scaleRange,
-                               setScaleRange,
 
                                increaseScaleRange,
                                decreaseScaleRange,
