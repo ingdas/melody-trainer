@@ -3,8 +3,7 @@ import generateDisplayScale from './generateDisplayScale';
 import {standardizeTonic} from '../rendering/convertToDisplayNotes';
 import generateAllNotesArray from '../allNotesArray';
 import {createScale} from "../../model/Scale";
-
-const notes = generateAllNotesArray();
+import allNotesArray from "../allNotesArray";
 
 const tonicOptions = [
     'C4',
@@ -283,12 +282,12 @@ const generateScale = (anyTonic, intervals, scaleRange) => {
     const tonic = standardizeTonic(anyTonic);
     console.log('generating Scale for', {tonic}, {intervals}, {scaleRange});
     const scale = [];
-    let noteIndex = notes.indexOf(tonic);
+    let noteIndex = allNotesArray.indexOf(tonic);
     let sumOfIntervals = 0;
     let i = 0;
 
     while (sumOfIntervals <= scaleRange) {
-        const note = notes[noteIndex % notes.length];
+        const note = allNotesArray[noteIndex % allNotesArray.length];
         scale.push(note);
         sumOfIntervals += intervals[i % intervals.length];
         noteIndex += intervals[i % intervals.length];

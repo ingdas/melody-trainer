@@ -1,8 +1,6 @@
-import generateAllNotesArray from '../allNotesArray';
 import {Soundfont} from "smplr";
 import {DrumMachine} from "smplr";
-
-const allNotesArray = generateAllNotesArray();
+import allNotesArray from "../allNotesArray";
 
 // https://danigb.github.io/smplr/
 // https://smpldsnds.github.io/drum-machines/TR-808/dm.json

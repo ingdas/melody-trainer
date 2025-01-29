@@ -1,7 +1,7 @@
 import {getRelativeNoteName, standardizeTonic} from '../rendering/convertToDisplayNotes'
-import generateAllNotesArray from '../allNotesArray';
+import allNotesArray from "../allNotesArray";
 
-const notes = generateAllNotesArray();
+const notes = allNotesArray;
 
 const majorScaleIntervals = [2, 2, 1, 2, 2, 2, 1];
 

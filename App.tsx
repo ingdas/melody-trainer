@@ -5,7 +5,6 @@ import {Dimensions, Text, TouchableOpacity, View,} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 import {useFonts} from 'expo-font';
-import generateAllNotesArray from './src/operations/allNotesArray';
 import Keyboard from './src/components/Keyboard';
 import {
     intervalNames,
@@ -33,6 +32,7 @@ import {Instrument} from "./src/model/Instrument";
 import {PercussionSettings} from "./src/components/settings/PercussionSettings";
 import {TempoMetronome} from "./src/components/TempoMetronome";
 import {updateMetronome} from "./src/model/Melody";
+import allNotesArray from "./src/operations/allNotesArray";
 
 
 const App = () => {
@@ -83,8 +83,6 @@ const App = () => {
         setInstrumentSettingsVisible,
         setPercussionSettingsVisible
     } = useStore();
-
-    const allNotesArray = useMemo(() => generateAllNotesArray(), []);
 
     // State Handlers
     const abortControllerRef = useRef(null);

@@ -20,4 +20,6 @@ const generateAllNotesArray = () => {
     return notes;
 };
 
-export default generateAllNotesArray;
+const allNotesArray = generateAllNotesArray()
+
+export default allNotesArray;
