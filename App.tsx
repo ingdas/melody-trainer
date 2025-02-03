@@ -5,15 +5,6 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 import {useFonts} from 'expo-font';
 import Keyboard from './src/components/Keyboard';
-import {
-    intervalNames,
-    intervalNamesMap,
-    modes,
-    randomMode,
-    randomScale,
-    randomTonic,
-    tonicOptions,
-} from './src/operations/scale/scaleHandler';
 import SheetMusic from './src/components/SheetMusic';
 import MeasureAndTempoSettings from './src/components/settings/MeasureAndTempoSettings';
 import {ContinuousPlaybackSettings} from './src/components/settings/ContinuousPlaybackSettings';
@@ -42,17 +33,10 @@ const App = () => {
         Maestro: require('./assets/fonts/maestro.ttf'),
     });
 
+    const store = useStore()
     const {
         tonic,
-        setTonic,
-        selectedScaleType,
-        setSelectedScaleType,
-        selectedMode,
-        setSelectedMode,
         scaleRange,
-        setScaleRange,
-        selectedInterval,
-        setSelectedInterval,
         scale,
         bpm,
         setBpm,
@@ -65,20 +49,14 @@ const App = () => {
         setStopPlayback,
         screenWidth,
         setScreenWidth,
-        isTonicModalVisible,
-        isScaleTypeModalVisible,
-        isModeModalVisible,
         context,
         instruments,
-        setTonicModalVisible,
-        setScaleTypeModalVisible,
-        setModeModalVisible,
         setInstrumentMelody,
         randomizeMelody,
         setInstrumentSettings,
         settingsModal,
         handleSettingsModalClick
-    } = useStore();
+    } = store;
 
     // State Handlers
     const abortControllerRef = useRef(null);
@@ -99,42 +77,7 @@ const App = () => {
     }, []);
 
     // SCALE AND MODE HANDLING
-    const handleRandomizeTonic = () => {
-        const newTonic = randomTonic(); // Get random tonic
-        setTonic(newTonic);
-    };
 
-    const handleRandomizeScaleType = () => {
-        setSelectedScaleType(randomScale());
-        setSelectedMode(randomMode(selectedScaleType));
-    };
-
-    const handleRandomizeMode = () => {
-        setSelectedMode(randomMode(selectedScaleType));
-    };
-
-    const chooseScaleType = (newScaleType : string) => {
-        const scaleTypeModes = modes[newScaleType];
-        const modesArray = Object.keys(scaleTypeModes);
-        setSelectedScaleType(newScaleType);
-        setSelectedMode(modesArray[0]);
-    };
-
-    const increaseScaleRange = () => {
-        let currentIndex = intervalNames.indexOf(selectedInterval);
-        let nextIndex = Math.min(currentIndex + 1, intervalNames.length - 1);
-        let newInterval = intervalNames[nextIndex];
-        setScaleRange(intervalNamesMap[newInterval]);
-        setSelectedInterval(newInterval);
-    };
-
-    const decreaseScaleRange = () => {
-        let currentIndex = intervalNames.indexOf(selectedInterval);
-        let nextIndex = Math.max(currentIndex - 1, 0);
-        let newInterval = intervalNames[nextIndex];
-        setScaleRange(intervalNamesMap[newInterval]);
-        setSelectedInterval(newInterval);
-    };
 
     const playScale = async () => {
         instruments.treble.settings.sound.stop({});
@@ -346,28 +289,7 @@ const App = () => {
                         numMeasures={numMeasures}
                         setNumMeasures={setNumMeasures}
                     />
-                    <ScaleModeSettings
-                        currentDisplayScale={scale.displayScale}
-                        tonic={tonic}
-                        setTonic={setTonic}
-                        isTonicModalVisible={isTonicModalVisible}
-                        setTonicModalVisible={setTonicModalVisible}
-                        tonicOptions={tonicOptions}
-                        handleRandomizeTonic={handleRandomizeTonic}
-                        selectedScaleType={selectedScaleType}
-                        chooseScaleType={chooseScaleType}
-                        isScaleTypeModalVisible={isScaleTypeModalVisible}
-                        setScaleTypeModalVisible={setScaleTypeModalVisible}
-                        handleRandomizeScaleType={handleRandomizeScaleType}
-                        selectedMode={selectedMode}
-                        setSelectedMode={setSelectedMode}
-                        isModeModalVisible={isModeModalVisible}
-                        setModeModalVisible={setModeModalVisible}
-                        handleRandomizeMode={handleRandomizeMode}
-                        scaleRange={scaleRange}
-                        increaseScaleRange={increaseScaleRange}
-                        decreaseScaleRange={decreaseScaleRange}
-                    />
+                    <ScaleModeSettings store={store}/>
                 </View>
             )}
             {settingsModal == SettingModal.InstrumentSettings && (
