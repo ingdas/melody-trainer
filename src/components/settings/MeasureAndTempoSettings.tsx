@@ -4,6 +4,7 @@ import React from 'react';
 import {Text, View} from 'react-native';
 import {colors, styles} from '../generic/styles';
 import PickerButton from '../generic/PickerButton';
+import {StoreActions, StoreState} from "../../model/UseStoreTypes";
 
 const tempoTerms = [
     {bpm: 0, term: 'Larghissimo'},
@@ -27,22 +28,31 @@ const tempoTerms = [
     {bpm: 200, term: 'Prestissimo'},
 ];
 
-const getTempoTerm = (bpm) => {
+const getTempoTerm = (bpm: number) => {
     const reversedTerms = [...tempoTerms].reverse();
     const term = reversedTerms.find((term) => bpm >= term.bpm);
     return term ? term.term : 'Unknown';
 };
 
-const MeasureAndTempoSettings = ({timeSignature, setTimeSignature, bpm, updateBpm, numMeasures, setNumMeasures}) => {
+const MeasureAndTempoSettings = ({
+                                     store: {
+                                         timeSignature,
+                                         setTimeSignature,
+                                         bpm,
+                                         setBpm,
+                                         numMeasures,
+                                         setNumMeasures
+                                     }
+                                 }: { store: StoreState & StoreActions }) => {
 
     const increaseBpm = () => {
         const newBpm = bpm + 5;
-        updateBpm(newBpm);
+        setBpm(newBpm);
     };
 
     const decreaseBpm = () => {
         const newBpm = bpm > 10 ? bpm - 5 : 10;
-        updateBpm(newBpm);
+        setBpm(newBpm);
     };
 
     const incrementNumMeasures = () => {
@@ -79,13 +89,13 @@ const MeasureAndTempoSettings = ({timeSignature, setTimeSignature, bpm, updateBp
 
             <View style={styles.pickerRow}>
                 <Text style={styles.label}>Tempo</Text>
-                <PickerButton onPress={decreaseBpm} label="-"/>
+                <PickerButton onPress={decreaseBpm} label="-" icon={null}/>
                 <View style={styles.metronomeContainer}>
                     <Text style={styles.noteText}>q</Text>
                     <Text style={styles.label}> =</Text>
                     <Text style={styles.bpmText}>{bpm}</Text>
                 </View>
-                <PickerButton onPress={increaseBpm} label="+"/>
+                <PickerButton onPress={increaseBpm} label="+" icon={null}/>
                 <Text style={styles.tempoTerm}>{getTempoTerm(bpm)}</Text>
             </View>
 
@@ -93,22 +103,22 @@ const MeasureAndTempoSettings = ({timeSignature, setTimeSignature, bpm, updateBp
                 <Text style={styles.label}>Measure</Text>
                 <View style={styles.measureContainer}>
                     <View style={styles.measureRow}>
-                        <PickerButton onPress={decrementTop} label="-"/>
+                        <PickerButton onPress={decrementTop} label="-" icon={null}/>
                         <Text style={styles.measureText}>{timeSignature[0]}</Text>
-                        <PickerButton onPress={incrementTop} label="+"/>
+                        <PickerButton onPress={incrementTop} label="+" icon={null}/>
                     </View>
                     <View style={styles.measureRow}>
-                        <PickerButton onPress={decrementBottom} label="-"/>
+                        <PickerButton onPress={decrementBottom} label="-" icon={null}/>
                         <Text style={styles.measureText}>{timeSignature[1]}</Text>
-                        <PickerButton onPress={incrementBottom} label="+"/>
+                        <PickerButton onPress={incrementBottom} label="+" icon={null}/>
                     </View>
                 </View>
             </View>
 
             <View style={styles.pickerRow}>
-                <PickerButton onPress={decrementNumMeasures} label="-"/>
+                <PickerButton onPress={decrementNumMeasures} label="-" icon={null}/>
                 <Text style={styles.label}> Number of Measure {numMeasures}</Text>
-                <PickerButton onPress={incrementNumMeasures} label="+"/>
+                <PickerButton onPress={incrementNumMeasures} label="+" icon={null}/>
             </View>
         </View>
     );

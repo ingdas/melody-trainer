@@ -39,11 +39,8 @@ const App = () => {
         scaleRange,
         scale,
         bpm,
-        setBpm,
         timeSignature,
-        setTimeSignature,
         numMeasures,
-        setNumMeasures,
         isPlayingContinuously,
         setIsPlayingContinuously,
         setStopPlayback,
@@ -281,14 +278,7 @@ const App = () => {
             )}
             {settingsModal == SettingModal.MeasureAndScaleSettings && (
                 <View style={styles.settingsTab}>
-                    <MeasureAndTempoSettings
-                        bpm={bpm}
-                        updateBpm={setBpm}
-                        timeSignature={timeSignature}
-                        setTimeSignature={setTimeSignature}
-                        numMeasures={numMeasures}
-                        setNumMeasures={setNumMeasures}
-                    />
+                    <MeasureAndTempoSettings store={store}/>
                     <ScaleModeSettings store={store}/>
                 </View>
             )}

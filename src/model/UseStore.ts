@@ -92,7 +92,6 @@ export const useStore = create<StoreState & StoreActions>((set, get) => ({
 
     scale: defaultScale(),
 
-    // Setters
     setTonic: (newTonic) => set((state) => {
         try {
             const scale = generateSelectedScale(
