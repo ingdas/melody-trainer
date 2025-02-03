@@ -43,7 +43,6 @@ const App = () => {
         numMeasures,
         isPlayingContinuously,
         setIsPlayingContinuously,
-        setStopPlayback,
         screenWidth,
         setScreenWidth,
         context,
@@ -105,7 +104,6 @@ const App = () => {
         if (isPlayingContinuously) {
             handleStopAllPlayback();
         } else {
-            setStopPlayback(false);
             setIsPlayingContinuously(true);
             abortControllerRef.current = new AbortController(); // Initialize AbortController
             playContinuously(
@@ -121,7 +119,6 @@ const App = () => {
     };
 
     const handleStopAllPlayback = () => {
-        setStopPlayback(true);
         instruments.treble.settings.sound.stop({});
         instruments.bass.settings.sound.stop({});
         instruments.percussion.settings.sound.stop({});

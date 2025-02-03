@@ -63,7 +63,6 @@ export const useStore = create<StoreState & StoreActions>((set, get) => ({
     timeSignature: [4, 4],
     numMeasures: 2,
     isPlayingContinuously: false,
-    stopPlayback: false,
     screenWidth: Dimensions.get('window').width,
 
     // Instrument Hierarchy
@@ -153,7 +152,6 @@ export const useStore = create<StoreState & StoreActions>((set, get) => ({
     setTimeSignature: (newTimeSignature) => set({timeSignature: newTimeSignature}),
     setNumMeasures: (newNumMeasures) => set({numMeasures: newNumMeasures}),
     setIsPlayingContinuously: (newStatus) => set({isPlayingContinuously: newStatus}),
-    setStopPlayback: (newStatus) => set({stopPlayback: newStatus}),
     setScreenWidth: (newWidth) => set({screenWidth: newWidth}),
 
     // Instrument Setters

@@ -27,7 +27,6 @@ interface StoreState {
     timeSignature: [number, number];
     numMeasures: number;
     isPlayingContinuously: boolean;
-    stopPlayback: boolean;
     screenWidth: number;
 
     instruments: Instruments;
@@ -51,7 +50,6 @@ interface StoreActions {
     setTimeSignature: (newTimeSignature: [number, number]) => void;
     setNumMeasures: (newNumMeasures: number) => void;
     setIsPlayingContinuously: (newStatus: boolean) => void;
-    setStopPlayback: (newStatus: boolean) => void;
     setScreenWidth: (newWidth: number) => void;
     setInstrumentSettings: (instrument: InstrumentType, newSettings: InstrumentSettings) => void;
     setInstrumentMelody: (instrument: InstrumentType, newMelody: Melody) => void;
