@@ -4,6 +4,14 @@ import {Instruments, InstrumentType} from "./Instrument";
 import {Scale} from "./Scale";
 import {Melody} from "./Melody";
 
+enum SettingModal {
+    Invisible,
+    MeasureAndScaleSettings,
+    PlaybackSettings,
+    InstrumentSettings,
+    PercussionSettings
+}
+
 interface StoreState {
     context: AudioContext;
     reverb: Reverb;
@@ -30,10 +38,7 @@ interface StoreState {
     isScaleTypeModalVisible: boolean;
     isModeModalVisible: boolean;
     isIntervalModalVisible: boolean;
-    isMeasureAndScaleSettingsVisible: boolean,
-    isPlaybackSettingsVisible: boolean,
-    isInstrumentSettingsVisible: boolean,
-    isPercussionSettingsVisible: boolean,
+    settingsModal : SettingModal;
 }
 
 interface StoreActions {
@@ -55,10 +60,7 @@ interface StoreActions {
     setScaleTypeModalVisible: (isVisible: boolean) => void;
     setModeModalVisible: (isVisible: boolean) => void;
     setIntervalModalVisible: (isVisible: boolean) => void;
-    setMeasureAndScaleSettingsVisible: (isVisible: boolean) => void;
-    setPlaybackSettingsVisible: (isVisible: boolean) => void;
-    setInstrumentSettingsVisible: (isVisible: boolean) => void;
-    setPercussionSettingsVisible: (isVisible: boolean) => void;
+    handleSettingsModalClick: (modalClicked: SettingModal) => void;
 }
 
-export {StoreState, StoreActions};
+export {StoreState, StoreActions, SettingModal};

@@ -34,6 +34,7 @@ import {PercussionSettings} from "./src/components/settings/PercussionSettings";
 import {TempoMetronome} from "./src/components/TempoMetronome";
 import {updateMetronome} from "./src/model/Melody";
 import allNotesArray from "./src/operations/allNotesArray";
+import {SettingModal} from "./src/model/UseStoreTypes";
 
 
 const App = () => {
@@ -67,10 +68,6 @@ const App = () => {
         isTonicModalVisible,
         isScaleTypeModalVisible,
         isModeModalVisible,
-        isMeasureAndScaleSettingsVisible,
-        isPlaybackSettingsVisible,
-        isInstrumentSettingsVisible,
-        isPercussionSettingsVisible,
         context,
         instruments,
         setTonicModalVisible,
@@ -79,10 +76,8 @@ const App = () => {
         setInstrumentMelody,
         randomizeMelody,
         setInstrumentSettings,
-        setMeasureAndScaleSettingsVisible,
-        setPlaybackSettingsVisible,
-        setInstrumentSettingsVisible,
-        setPercussionSettingsVisible
+        settingsModal,
+        handleSettingsModalClick
     } = useStore();
 
     // State Handlers
@@ -205,35 +200,6 @@ const App = () => {
         }, 20);
     };
 
-    // TOGGLE VIEWS
-    const handleToggleMeasureAndScaleSettings = () => {
-        setMeasureAndScaleSettingsVisible(!isMeasureAndScaleSettingsVisible);
-        setPlaybackSettingsVisible(false);
-        setInstrumentSettingsVisible(false);
-        setPercussionSettingsVisible(false);
-    };
-
-    const handleTogglePlaybackSettings = () => {
-        setMeasureAndScaleSettingsVisible(false);
-        setPlaybackSettingsVisible(!isPlaybackSettingsVisible);
-        setInstrumentSettingsVisible(false);
-        setPercussionSettingsVisible(false);
-    };
-
-    const handleToggleInstrumentSettings = () => {
-        setMeasureAndScaleSettingsVisible(false);
-        setPlaybackSettingsVisible(false);
-        setInstrumentSettingsVisible(!isInstrumentSettingsVisible);
-        setPercussionSettingsVisible(false);
-    };
-
-    const handleTogglePercussionSettings = () => {
-        setMeasureAndScaleSettingsVisible(false);
-        setPlaybackSettingsVisible(false);
-        setInstrumentSettingsVisible(false);
-        setPercussionSettingsVisible(!isPercussionSettingsVisible);
-    };
-
     // Definitions for VIEWS
     return (
         <View style={styles.container}>
@@ -316,64 +282,61 @@ const App = () => {
             <View
                 style={[
                     styles.tabToggleContainer,
-                    isMeasureAndScaleSettingsVisible ||
-                    isPlaybackSettingsVisible ||
-                    isInstrumentSettingsVisible ||
-                    isPercussionSettingsVisible
-                        ? {bottom: '50%'}
-                        : {bottom: 0},
+                    settingsModal == SettingModal.Invisible
+                        ? {bottom: 0}
+                        : {bottom: '50%'},
                 ]}>
                 <TouchableOpacity
                     style={[
                         styles.tabToggle,
-                        isMeasureAndScaleSettingsVisible
+                        settingsModal == SettingModal.MeasureAndScaleSettings
                             ? {backgroundColor: colors.measureAndScaleActive}
                             : {backgroundColor: colors.measureAndScalePassive},
                     ]}
-                    onPress={handleToggleMeasureAndScaleSettings}>
+                    onPress={() => handleSettingsModalClick(SettingModal.MeasureAndScaleSettings)}>
                     <FontAwesomeIcon icon={faPlay} size={"1x"} color="#E5E5E5"/>
                     <Text style={styles.tabTitle}> Measure & Scale</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[
                         styles.tabToggle,
-                        isPlaybackSettingsVisible
+                        settingsModal == SettingModal.PlaybackSettings
                             ? {backgroundColor: colors.playbackActive}
                             : {backgroundColor: colors.playbackPassive},
                     ]}
-                    onPress={handleTogglePlaybackSettings}>
+                    onPress={() => handleSettingsModalClick(SettingModal.PlaybackSettings)}>
                     <FontAwesomeIcon icon={faPlay} size={"1x"} color="#E5E5E5"/>
                     <Text style={styles.tabTitle}> Playback</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[
                         styles.tabToggle,
-                        isInstrumentSettingsVisible
+                        settingsModal == SettingModal.InstrumentSettings
                             ? {backgroundColor: colors.instrumentsActive}
                             : {backgroundColor: colors.instrumentsPassive},
                     ]}
-                    onPress={handleToggleInstrumentSettings}>
+                    onPress={() => handleSettingsModalClick(SettingModal.InstrumentSettings)}>
                     <FontAwesomeIcon icon={faGuitar} size={"1x"} color="#E5E5E5"/>
                     <Text style={styles.tabTitle}> Instruments</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[
                         styles.tabToggle,
-                        isPercussionSettingsVisible
+                        settingsModal == SettingModal.PercussionSettings
                             ? {backgroundColor: colors.percussionActive}
                             : {backgroundColor: colors.percussionPassive},
                     ]}
-                    onPress={handleTogglePercussionSettings}>
+                    onPress={() => handleSettingsModalClick(SettingModal.PercussionSettings)}>
                     <FontAwesomeIcon icon={faPlay} size={"1x"} color="#E5E5E5"/>
                     <Text style={styles.tabTitle}> Percussion</Text>
                 </TouchableOpacity>
             </View>
-            {isPlaybackSettingsVisible && (
+            {settingsModal == SettingModal.PlaybackSettings && (
                 <View style={[styles.settingsTab, styles.playbackSettingsTab]}>
                     <ContinuousPlaybackSettings/>
                 </View>
             )}
-            {isMeasureAndScaleSettingsVisible && (
+            {settingsModal == SettingModal.MeasureAndScaleSettings && (
                 <View style={styles.settingsTab}>
                     <MeasureAndTempoSettings
                         bpm={bpm}
@@ -407,7 +370,7 @@ const App = () => {
                     />
                 </View>
             )}
-            {isInstrumentSettingsVisible && (
+            {settingsModal == SettingModal.InstrumentSettings && (
                 <View style={styles.settingsTab}>
                     <TrebleSettings
                         trebleInstrumentSettings={instruments.treble.settings}
@@ -415,7 +378,7 @@ const App = () => {
                     />
                 </View>
             )}
-            {isPercussionSettingsVisible && (
+            {settingsModal == SettingModal.PercussionSettings && (
                 <View style={styles.settingsTab}>
                     <PercussionSettings/>
                 </View>

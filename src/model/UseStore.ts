@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import {createScale, defaultPercussionScale, defaultScale, generateBassScale, Scale} from "./Scale";
+import {defaultPercussionScale, defaultScale, generateBassScale, Scale} from "./Scale";
 import {
     defaultBassInstrumentSettings,
     defaultMetronomeInstrumentSettings,
@@ -10,7 +10,7 @@ import {
 import {defaultBassMelody, defaultMetronomeMelody, defaultPercussionMelody, defaultTrebleMelody} from "./Melody";
 import {Dimensions} from "react-native";
 import {CacheStorage, Reverb} from "smplr";
-import {StoreActions, StoreState} from './UseStoreTypes';
+import {SettingModal, StoreActions, StoreState} from './UseStoreTypes';
 import {Instrument} from "./Instrument";
 import {generateMelody} from "./MelodyGenerator";
 import {generateSelectedScale} from "../operations/scale/scaleHandler";
@@ -195,12 +195,10 @@ export const useStore = create<StoreState & StoreActions>((set, get) => ({
     setModeModalVisible: (isVisible) => set({isModeModalVisible: isVisible}),
     setIntervalModalVisible: (isVisible) => set({isIntervalModalVisible: isVisible}),
 
-    isMeasureAndScaleSettingsVisible: false,
-    isPlaybackSettingsVisible: false,
-    isInstrumentSettingsVisible: false,
-    isPercussionSettingsVisible: false,
-    setMeasureAndScaleSettingsVisible: (isVisible) => set({isMeasureAndScaleSettingsVisible: isVisible}),
-    setPlaybackSettingsVisible: (isVisible) => set({isPlaybackSettingsVisible: isVisible}),
-    setInstrumentSettingsVisible: (isVisible) => set({isInstrumentSettingsVisible: isVisible}),
-    setPercussionSettingsVisible: (isVisible) => set({isPercussionSettingsVisible: isVisible}),
+    settingsModal: SettingModal.Invisible,
+    handleSettingsModalClick: (modalClicked) => set((state) => {
+        if(state.settingsModal == modalClicked) {
+            return {settingsModal: SettingModal.Invisible}
+        }
+        return {settingsModal: modalClicked}}),
 }));
