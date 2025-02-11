@@ -62,7 +62,7 @@ const SheetMusic = ({
                         key={`measure-text-${index}`}
                         x={measurePositionX}
                         y={yPos}
-                        fontSize="32"
+                        fontSize="32px"
                         fill="white"
                         fontFamily="Maestro"
                         textAnchor="middle" // Center horizontally
@@ -76,7 +76,7 @@ const SheetMusic = ({
                         key={`measure-text-${index}`}
                         x={measurePositionX}
                         y={yPos + 10}
-                        fontSize="32"
+                        fontSize="32px"
                         fill="white"
                         fontFamily="Maestro"
                         textAnchor="middle" // Center horizontally
@@ -146,7 +146,7 @@ const SheetMusic = ({
     return (
         <View style={{alignItems: 'center'}}>
             <Svg width={endX + 2} viewBox={`0 -20 ${endX + 2} 270`}>
-                <Path d={`M 0 -19 H 50 M 0 249 H 50`} stroke="yellow" strokeWidth="1"/>
+                {/*<Path d={`M 0 -19 H 50 M 0 249 H 50`} stroke="yellow" strokeWidth="1"/>*/}
                 {/* Draw musical staff */}
                 {staffLines.map((y) => (
                     <Path
@@ -157,17 +157,17 @@ const SheetMusic = ({
                     />
                 ))}
                 {/* Clefs */}
-                <SvgText x="8" y="40" fontSize="36" fill="white" fontFamily="Maestro">
+                <SvgText x="8" y="40" fontSize="36px" fill="white" fontFamily="Maestro">
                     &
                 </SvgText>
-                <SvgText x="8" y="100" fontSize="36" fill="white" fontFamily="Maestro">
+                <SvgText x="8" y="100" fontSize="36px" fill="white" fontFamily="Maestro">
                     ?
                 </SvgText>
                 {/* Draw percussion staff */}
                 <SvgText
                     x="18"
                     y="200" // Adjust Y position as needed
-                    fontSize="36"
+                    fontSize="36px"
                     fill="white"
                     fontFamily="Maestro">
                     /

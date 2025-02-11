@@ -26,6 +26,7 @@ import {TempoMetronome} from "./src/components/TempoMetronome";
 import {updateMetronome} from "./src/model/Melody";
 import allNotesArray from "./src/operations/allNotesArray";
 import {SettingModal} from "./src/model/UseStoreTypes";
+import {ConfigurableSheetMusic} from "./src/components/ConfigurableSheetMusic";
 
 
 const App = () => {
@@ -141,16 +142,7 @@ const App = () => {
     return (
         <View style={styles.container}>
             <View style={styles.visualizer}>
-                <Text style={styles.text}>Melody Visualizer</Text>
-                <SheetMusic
-                    timeSignature={timeSignature}
-                    trebleMelody={instruments.treble.melody}
-                    bassMelody={instruments.bass.melody}
-                    percussionMelody={instruments.percussion.melody}
-                    numAccidentals={scale.numAccidentals}
-                    screenWidth={screenWidth}
-                />
-                <View style={styles.paddingRow}/>
+                <ConfigurableSheetMusic store={store}/>
             </View>
             <View style={styles.tempoMetronome}>
                 <View style={styles.pickerRow}>
@@ -201,7 +193,6 @@ const App = () => {
                 </View>
             </View>
             <View style={styles.visualizer}>
-                <Text style={styles.text}>Piano View</Text>
                 <Keyboard
                     scaleRange={scaleRange}
                     anyTonic={tonic}
@@ -213,9 +204,6 @@ const App = () => {
                 />
                 <View style={styles.paddingRow}/>
             </View>
-            <TempoMetronome/>
-            <View style={styles.paddingRow}/>
-            <View style={styles.paddingRow}/>
             <View
                 style={[
                     styles.tabToggleContainer,

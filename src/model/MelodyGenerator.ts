@@ -130,7 +130,7 @@ function generateMelody(config: MelodyGeneratorConfig): Melody {
             smallestNoteDenom,
             rhythmVariability,
             enableTriplets,
-            randomizationRules,
+            randomizationRule,
             type
         }
     } = config.instrumentState;
@@ -204,7 +204,7 @@ function generateMelody(config: MelodyGeneratorConfig): Melody {
         scale,
         notesPerMeasure,
         numMeasures,
-        randomizationRules
+        randomizationRule
     );
 
     // Handle rests and display melody

@@ -36,7 +36,7 @@ const renderAccidentals = (numAccidentals) => {
                     key={`${symbol}-${i}`}
                     x={x}
                     y={y}
-                    fontSize="28"
+                    fontSize="28px"
                     fill="white"
                     fontFamily="Maestro">
                     {symbol}

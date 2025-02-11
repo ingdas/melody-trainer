@@ -1,4 +1,6 @@
-function convertRankedArrayToMelody(rankedArray, tonic, scale, notesPerMeasure, numMeasures, randomizationRules) {
+import {RandomizationRule} from "../../model/InstrumentSettings";
+
+function convertRankedArrayToMelody(rankedArray, tonic, scale, notesPerMeasure, numMeasures, randomizationRule : RandomizationRule) {
     const generatedMelody = rankedArray;
     const melodyLength = notesPerMeasure * numMeasures;
     const numberOfSlotsPerMeasure = rankedArray.length / numMeasures;
@@ -10,7 +12,7 @@ function convertRankedArrayToMelody(rankedArray, tonic, scale, notesPerMeasure, 
             const slot = generatedMelody[i];
             if (slot === rank) {
                 let index;
-                if (randomizationRules === 'tonicOnOnes' && (i % numberOfSlotsPerMeasure === 0)) {
+                if (randomizationRule === RandomizationRule.TonicOnOne && (i % numberOfSlotsPerMeasure === 0)) {
                     generatedMelody[i] = tonic; // Assume the bass note is the first note in the scale for simplicity
                 } else {
                     index = Math.floor(Math.random() * scale.length);

@@ -169,7 +169,7 @@ const renderMelodyNotes = (
                     key={index}
                     x={positionX}
                     y={restY}
-                    fontSize="32"
+                    fontSize="32px"
                     fill="white"
                     fontFamily="Maestro">
                     {restMap[duration]}
@@ -219,7 +219,7 @@ const renderMelodyNotes = (
                     <SvgText
                         x={positionX}
                         y={positionY}
-                        fontSize="32"
+                        fontSize="32px"
                         fill="white"
                         fontFamily="Maestro">
                         {noteSymbol}
@@ -227,7 +227,7 @@ const renderMelodyNotes = (
                     <SvgText
                         x={positionX + 13}
                         y={positionY - .5 + (positionY % 10)}
-                        fontSize="32"
+                        fontSize="32px"
                         fill="white"
                         fontFamily="Maestro">
                         {dot}
@@ -242,7 +242,7 @@ const renderMelodyNotes = (
                     <SvgText
                         x={flagX}
                         y={flagY}
-                        fontSize="32"
+                        fontSize="32px"
                         fill="white"
                         fontFamily="Maestro">
                         {flagSymbol}
@@ -250,7 +250,7 @@ const renderMelodyNotes = (
                     <SvgText
                         x={positionX - 4}
                         y={positionY - 3}
-                        fontSize="32"
+                        fontSize="32px"
                         fill="white"
                         fontFamily="Maestro">
                         {staff === 'percussion' ? null : accidentals[index]}

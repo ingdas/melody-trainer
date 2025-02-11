@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#013',
         justifyContent: 'space-between', // Spread items vertically
         alignItems: 'center', // Center items horizontally
-        paddingVertical: 20, // Optional: Add some padding if needed
     },
     piano: {
         flex: 1,

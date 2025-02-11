@@ -2,6 +2,15 @@ import { DrumMachine, Soundfont } from "smplr";
 
 import {Instrument} from "./Instrument";
 
+enum RandomizationRule {
+    Uniform = "uniform",
+    TonicOnOne = "tonicOnOnes",
+    Percussion = "percussion",
+    Metronome = "metronome",
+    Keep = "Keep",
+    Mute = "Mute",
+}
+
 type InstrumentSettings = {
     instrument: string;
     type: Instrument;
@@ -9,7 +18,7 @@ type InstrumentSettings = {
     smallestNoteDenom: number;
     rhythmVariability: number;
     enableTriplets: boolean;
-    randomizationRules: string;
+    randomizationRule: RandomizationRule;
     context: AudioContext;
     storage: any;
     reverb: any;
@@ -23,7 +32,7 @@ const createInstrumentSettings = (
     smallestNoteDenom: number,
     rhythmVariability: number,
     enableTriplets: boolean,
-    randomizationRules: string,
+    randomizationRule: RandomizationRule,
     context: AudioContext,
     storage: any,
     reverb: any
@@ -35,7 +44,7 @@ const createInstrumentSettings = (
         smallestNoteDenom,
         rhythmVariability,
         enableTriplets,
-        randomizationRules,
+        randomizationRule: randomizationRule,
         context,
         storage,
         reverb,
@@ -83,7 +92,7 @@ const defaultTrebleInstrumentSettings = (
         4,
         30,
         false,
-        "uniform",
+        RandomizationRule.Uniform,
         context,
         storage,
         reverb
@@ -101,7 +110,7 @@ const defaultBassInstrumentSettings = (
         2,
         0,
         false,
-        "tonicOnOnes",
+        RandomizationRule.TonicOnOne,
         context,
         storage,
         reverb
@@ -119,7 +128,7 @@ const defaultPercussionInstrumentSettings = (
         8,
         30,
         false,
-        "percussion",
+        RandomizationRule.Percussion,
         context,
         storage,
         reverb
@@ -137,7 +146,7 @@ const defaultMetronomeInstrumentSettings = (
         4,
         0,
         false,
-        "metronome",
+        RandomizationRule.Metronome,
         context,
         storage,
         reverb
@@ -150,5 +159,6 @@ export {
     defaultPercussionInstrumentSettings,
     defaultMetronomeInstrumentSettings,
     updateSound,
-    InstrumentSettings
+    InstrumentSettings,
+    RandomizationRule
 };
