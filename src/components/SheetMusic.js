@@ -37,7 +37,7 @@ const SheetMusic = ({
         return null;
     }
 
-    const endX = screenWidth * 0.85;
+    const endX = Math.min(900, Math.max(400, screenWidth * 0.85));
 
     const staffLines = [
         11, 21, 31, 41, 51, 91, 101, 111, 121, 131, 171, 181, 191, 201, 211,

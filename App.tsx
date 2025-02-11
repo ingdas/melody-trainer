@@ -5,7 +5,6 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 import {useFonts} from 'expo-font';
 import Keyboard from './src/components/Keyboard';
-import SheetMusic from './src/components/SheetMusic';
 import MeasureAndTempoSettings from './src/components/settings/MeasureAndTempoSettings';
 import {ContinuousPlaybackSettings} from './src/components/settings/ContinuousPlaybackSettings';
 import TrebleSettings from './src/components/settings/TrebleSettings';
@@ -22,7 +21,6 @@ import {InstrumentSettings} from "./src/model/InstrumentSettings";
 
 import {Instrument} from "./src/model/Instrument";
 import {PercussionSettings} from "./src/components/settings/PercussionSettings";
-import {TempoMetronome} from "./src/components/TempoMetronome";
 import {updateMetronome} from "./src/model/Melody";
 import allNotesArray from "./src/operations/allNotesArray";
 import {SettingModal} from "./src/model/UseStoreTypes";
@@ -44,7 +42,6 @@ const App = () => {
         numMeasures,
         isPlayingContinuously,
         setIsPlayingContinuously,
-        screenWidth,
         setScreenWidth,
         context,
         instruments,
